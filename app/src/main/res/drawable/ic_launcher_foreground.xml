@@ -1,0 +1,23 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- piatto -->
+    <path android:fillColor="#FFD9D2"
+        android:pathData="M26,78 h56 a2,2 0 0 1 0,4 h-56 a2,2 0 0 1 0,-4 z" />
+    <!-- torta -->
+    <path android:fillColor="#FFF4E8"
+        android:pathData="M32,54 h44 v22 a2,2 0 0 1 -2,2 h-40 a2,2 0 0 1 -2,-2 z" />
+    <path android:fillColor="#FFC94A"
+        android:pathData="M32,67 h44 v3 h-44 z" />
+    <!-- glassa -->
+    <path android:fillColor="#FFC94A"
+        android:pathData="M30,52 a4,4 0 0 1 4,-4 h40 a4,4 0 0 1 4,4 v6 a4,4 0 0 1 -8,0 a4,4 0 0 1 -8,0 a4,4 0 0 1 -8,0 a4,4 0 0 1 -8,0 a4,4 0 0 1 -8,0 a4,4 0 0 1 -8,0 z" />
+    <!-- candelina -->
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M51,34 h6 v14 h-6 z" />
+    <!-- fiamma -->
+    <path android:fillColor="#FFC94A"
+        android:pathData="M54,22 c3,4 4,6.5 4,8.5 a4,4 0 0 1 -8,0 c0,-2 1,-4.5 4,-8.5 z" />
+</vector>
