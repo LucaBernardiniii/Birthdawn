@@ -53,5 +53,6 @@ object Prefs {
         sp(context).edit().putString("home_sort", value).apply()
     }
 
+
     fun timeLabel(context: Context) = "%02d:%02d".format(hour(context), minute(context))
 }
