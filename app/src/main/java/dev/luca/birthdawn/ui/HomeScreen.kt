@@ -75,6 +75,7 @@ private enum class HomeSort(val label: String) {
     ALPHABETICAL("A–Z"),
     CALENDAR("Gen → Dic"),
 }
+
 @Composable
 fun HomeScreen(
     people: List<Person>,
