@@ -14,6 +14,7 @@ import dev.luca.compleanni.data.PeopleRepository
 import dev.luca.compleanni.notify.Notifier
 import dev.luca.compleanni.notify.ReminderScheduler
 import dev.luca.compleanni.ui.App
+import dev.luca.compleanni.ui.theme.AppearanceSettings
 import dev.luca.compleanni.ui.theme.CompleanniTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,6 +30,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         PeopleRepository.load(this)
+        AppearanceSettings.load(this)
         Notifier.ensureChannel(this)
         ReminderScheduler.schedule(this)
         ReminderScheduler.runCheckIfDue(this)

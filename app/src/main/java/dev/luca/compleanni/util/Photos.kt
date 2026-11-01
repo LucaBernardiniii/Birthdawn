@@ -9,6 +9,7 @@ import android.net.Uri
 import android.util.LruCache
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.palette.graphics.Palette
 import java.io.File
 import java.io.FileOutputStream
 
@@ -68,6 +69,29 @@ object Photos {
         val bmp = BitmapFactory.decodeFile(f.path, opts)?.asImageBitmap() ?: return null
         cache.put(key, bmp)
         return bmp
+    }
+
+    private val accentCache = HashMap<String, Int>()
+
+    /** Colore d'accento estratto dalla foto (vivace se possibile, altrimenti dominante). */
+    fun accentColor(context: Context, name: String): Int? {
+        synchronized(accentCache) { accentCache[name]?.let { return it } }
+        val f = file(context, name)
+        if (!f.exists()) return null
+        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeFile(f.path, bounds)
+        val opts = BitmapFactory.Options().apply {
+            inSampleSize = sampleSize(bounds.outWidth, bounds.outHeight, 200)
+        }
+        val bmp = BitmapFactory.decodeFile(f.path, opts) ?: return null
+        val palette = Palette.from(bmp).generate()
+        val swatch = palette.vibrantSwatch
+            ?: palette.lightVibrantSwatch
+            ?: palette.darkVibrantSwatch
+            ?: palette.dominantSwatch
+            ?: return null
+        synchronized(accentCache) { accentCache[name] = swatch.rgb }
+        return swatch.rgb
     }
 
     private fun sampleSize(w: Int, h: Int, max: Int): Int {

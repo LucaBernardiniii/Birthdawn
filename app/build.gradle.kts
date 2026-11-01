@@ -23,8 +23,8 @@ android {
         applicationId = "dev.luca.compleanni"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
     }
 
     signingConfigs {
@@ -72,5 +72,6 @@ dependencies {
     implementation("androidx.compose.foundation:foundation")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.palette:palette-ktx:1.0.0")
     debugImplementation("androidx.compose.ui:ui-tooling")
 }

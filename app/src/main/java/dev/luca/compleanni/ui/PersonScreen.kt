@@ -8,7 +8,14 @@ package dev.luca.compleanni.ui
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.produceState
+import dev.luca.compleanni.ui.theme.AppearanceSettings
+import dev.luca.compleanni.ui.theme.schemeFromSeed
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -148,6 +155,8 @@ fun PersonScreen(existing: Person?, onClose: () -> Unit) {
 
     val canSave = name.isNotBlank() && month in 1..12 && day >= 1
 
+    // Se attivo nelle impostazioni, tutta la pagina usa il colore estratto dalla foto
+    PhotoAccentTheme(photo) {
     Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
         Column(
             Modifier
@@ -372,6 +381,50 @@ fun PersonScreen(existing: Person?, onClose: () -> Unit) {
             dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text("Annulla") } },
         )
     }
+    } // PhotoAccentTheme
+}
+
+/** Applica una palette generata dal colore della foto, con transizione morbida. */
+@Composable
+private fun PhotoAccentTheme(photo: String?, content: @Composable () -> Unit) {
+    val context = LocalContext.current
+    val appearance by AppearanceSettings.state.collectAsState()
+    val dark = isSystemInDarkTheme()
+    val seed by produceState<Int?>(initialValue = null, photo, appearance.photoAccent) {
+        value = if (appearance.photoAccent && photo != null) {
+            withContext(Dispatchers.Default) { Photos.accentColor(context, photo) }
+        } else null
+    }
+    val base = MaterialTheme.colorScheme
+    val target = remember(seed, dark, base) {
+        seed?.let { schemeFromSeed(Color(it), dark) } ?: base
+    }
+    val spec = tween<Color>(durationMillis = 450)
+    val primary by animateColorAsState(target.primary, spec, label = "primary")
+    val onPrimary by animateColorAsState(target.onPrimary, spec, label = "onPrimary")
+    val primaryContainer by animateColorAsState(target.primaryContainer, spec, label = "pc")
+    val onPrimaryContainer by animateColorAsState(target.onPrimaryContainer, spec, label = "opc")
+    val tertiary by animateColorAsState(target.tertiary, spec, label = "tertiary")
+    val background by animateColorAsState(target.background, spec, label = "bg")
+    val surfaceContainer by animateColorAsState(target.surfaceContainer, spec, label = "sc")
+    val secondaryContainer by animateColorAsState(target.secondaryContainer, spec, label = "sec")
+    val onSecondaryContainer by animateColorAsState(target.onSecondaryContainer, spec, label = "osec")
+
+    MaterialTheme(
+        colorScheme = target.copy(
+            primary = primary,
+            onPrimary = onPrimary,
+            primaryContainer = primaryContainer,
+            onPrimaryContainer = onPrimaryContainer,
+            tertiary = tertiary,
+            background = background,
+            surface = background,
+            surfaceContainer = surfaceContainer,
+            secondaryContainer = secondaryContainer,
+            onSecondaryContainer = onSecondaryContainer,
+        ),
+        content = content,
+    )
 }
 
 @Composable
