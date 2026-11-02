@@ -42,15 +42,15 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew assembleRelease --no-daemon --stacktrace
-          mv app/build/outputs/apk/release/app-release.apk Compleanni.apk
+          mv app/build/outputs/apk/release/app-release.apk Birthdawn.apk
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Compleanni-apk
-          path: Compleanni.apk
+          name: Birthdawn-apk
+          path: Birthdawn.apk
 
       - name: Pubblica release (solo per tag v*)
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: Compleanni.apk
+          files: Birthdawn.apk

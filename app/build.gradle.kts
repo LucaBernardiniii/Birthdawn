@@ -16,15 +16,16 @@ val releaseKeystore = signingValue("storeFile", "KEYSTORE_FILE")?.let { rootProj
 val hasReleaseKey = releaseKeystore?.exists() == true
 
 android {
-    namespace = "dev.luca.compleanni"
+    namespace = "dev.luca.birthdawn"
     compileSdk = 35
 
     defaultConfig {
+        // ID di installazione invariato: così Birthdawn si installa come aggiornamento della versione già sul telefono
         applicationId = "dev.luca.compleanni"
         minSdk = 26
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 3
+        versionName = "1.2"
     }
 
     signingConfigs {
