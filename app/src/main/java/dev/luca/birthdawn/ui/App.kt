@@ -47,7 +47,12 @@ private const val PERSON = "person:"
 private const val EDIT = "edit:"
 
 @Composable
-fun App(personToOpen: String?, onPersonOpened: () -> Unit) {
+fun App(
+    personToOpen: String?,
+    onPersonOpened: () -> Unit,
+    shared: Pair<String, String?>? = null,
+    onSharedHandled: () -> Unit = {},
+) {
     val people by PeopleRepository.people.collectAsState()
     var tab by rememberSaveable { mutableIntStateOf(0) }
     var route by rememberSaveable { mutableStateOf(ROUTE_MAIN) }
@@ -58,6 +63,18 @@ fun App(personToOpen: String?, onPersonOpened: () -> Unit) {
             if (PeopleRepository.get(personToOpen) != null) route = PERSON + personToOpen
             onPersonOpened()
         }
+    }
+
+    if (shared != null) {
+        SharedGiftDialog(
+            sharedText = shared.first,
+            sharedSubject = shared.second,
+            people = people,
+            onDone = { savedFor ->
+                onSharedHandled()
+                if (savedFor != null) route = PERSON + savedFor
+            },
+        )
     }
 
     AnimatedContent(

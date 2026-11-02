@@ -539,7 +539,7 @@ fun RoundIconButton(onClick: () -> Unit, content: @Composable () -> Unit) {
 }
 
 @Composable
-private fun BirthdayDatePicker(
+fun BirthdayDatePicker(
     initialMonth: Int,
     initialDay: Int,
     initialYear: Int?,

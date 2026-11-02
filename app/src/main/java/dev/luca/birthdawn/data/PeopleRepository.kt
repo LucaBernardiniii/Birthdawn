@@ -33,9 +33,18 @@ object PeopleRepository {
     fun get(id: String): Person? = _people.value.firstOrNull { it.id == id }
 
     fun upsert(context: Context, person: Person) {
-        val list = _people.value.filterNot { it.id == person.id } + person
+        // Mantiene la posizione della persona nella lista
+        val current = _people.value
+        val index = current.indexOfFirst { it.id == person.id }
+        val list = if (index >= 0) current.toMutableList().apply { set(index, person) } else current + person
         _people.value = list
         writeFile(context.applicationContext, list)
+    }
+
+    /** Modifica solo le idee regalo di una persona. */
+    fun updateGifts(context: Context, personId: String, transform: (List<GiftIdea>) -> List<GiftIdea>) {
+        val person = get(personId) ?: return
+        upsert(context, person.copy(gifts = transform(person.gifts)))
     }
 
     fun delete(context: Context, id: String) {
@@ -77,6 +86,16 @@ object PeopleRepository {
         p.photoPath?.let { put("photo", it) }
         put("notes", p.notes)
         put("reminders", JSONArray().apply { p.reminderDays.forEach { put(it) } })
+        put("gifts", JSONArray().apply {
+            p.gifts.forEach { g ->
+                put(JSONObject().apply {
+                    put("id", g.id)
+                    put("title", g.title)
+                    g.url?.let { put("url", it) }
+                    put("bought", g.bought)
+                })
+            }
+        })
     }
 
     private fun fromJson(o: JSONObject): Person {
@@ -85,6 +104,20 @@ object PeopleRepository {
             val a = o.getJSONArray("reminders")
             (0 until a.length()).map { a.getInt(it) }
         } else Person.DEFAULT_REMINDERS
+        val gifts = if (has("gifts")) {
+            val a = o.getJSONArray("gifts")
+            (0 until a.length()).mapNotNull { i ->
+                runCatching {
+                    val g = a.getJSONObject(i)
+                    GiftIdea(
+                        id = g.getString("id"),
+                        title = g.optString("title", ""),
+                        url = if (g.has("url") && !g.isNull("url")) g.getString("url") else null,
+                        bought = g.optBoolean("bought", false),
+                    )
+                }.getOrNull()
+            }
+        } else emptyList()
         return Person(
             id = o.getString("id"),
             name = o.getString("name"),
@@ -94,6 +127,7 @@ object PeopleRepository {
             photoPath = if (has("photo")) o.getString("photo") else null,
             notes = if (has("notes")) o.getString("notes") else "",
             reminderDays = reminders,
+            gifts = gifts,
         )
     }
 }

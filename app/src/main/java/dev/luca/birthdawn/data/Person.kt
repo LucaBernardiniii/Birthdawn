@@ -16,8 +16,17 @@ data class Person(
     val photoPath: String? = null,
     val notes: String = "",
     val reminderDays: List<Int> = DEFAULT_REMINDERS,
+    val gifts: List<GiftIdea> = emptyList(),
 ) {
     companion object {
         val DEFAULT_REMINDERS = listOf(7, 0)
     }
 }
+
+/** Un'idea regalo: un titolo e, facoltativo, un link (es. pagina di un negozio online). */
+data class GiftIdea(
+    val id: String,
+    val title: String,
+    val url: String? = null,
+    val bought: Boolean = false,
+)

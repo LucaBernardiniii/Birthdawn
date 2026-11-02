@@ -51,8 +51,22 @@ object Notifier {
         } else {
             formatDayMonth(person.day, person.month) + (age?.let { " · compie $it anni" } ?: "")
         }
-        val fullText = if (person.notes.isNotBlank()) "$text\n${person.notes}" else text
+        val ideas = person.gifts.count { !it.bought }
+        val giftLine = when {
+            daysBefore == 0 || ideas == 0 -> null
+            ideas == 1 -> "🎁 Hai 1 idea regalo salvata"
+            else -> "🎁 Hai $ideas idee regalo salvate"
+        }
+        val fullText = listOfNotNull(text, giftLine, person.notes.takeIf { it.isNotBlank() }).joinToString("\n")
         post(context, (person.id + daysBefore).hashCode(), title, text, fullText, person.id)
+    }
+
+    fun showOwnBirthday(context: Context, name: String, age: Int?) {
+        val who = name.trim().ifEmpty { null }
+        val title = "🎉 Buon compleanno" + (who?.let { ", $it" } ?: "") + "!"
+        val text = (age?.takeIf { it > 0 }?.let { "$it anni! " } ?: "") +
+            "Tanti auguri da Birthdawn, goditi la giornata 🎂"
+        post(context, 7777, title, text, text, null)
     }
 
     fun showTest(context: Context): Boolean {

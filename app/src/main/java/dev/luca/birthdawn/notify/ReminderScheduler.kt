@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import dev.luca.birthdawn.data.PeopleRepository
+import dev.luca.birthdawn.util.birthdayIn
 import dev.luca.birthdawn.util.daysUntil
 import dev.luca.birthdawn.util.nextBirthday
 import java.time.LocalDate
@@ -44,6 +45,11 @@ object ReminderScheduler {
             val days = person.daysUntil(today)
             if (days in person.reminderDays) {
                 Notifier.showBirthday(context, person, days, person.nextBirthday(today))
+            }
+        }
+        Prefs.myBirthday(context)?.let { me ->
+            if (birthdayIn(today.year, me.month, me.day) == today) {
+                Notifier.showOwnBirthday(context, me.name, me.year?.let { today.year - it })
             }
         }
     }

@@ -100,7 +100,7 @@ fun PersonDetailScreen(
                     Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    CountdownCard(days = days, nextDate = next, turning = turning)
+                    CountdownCard(person = person, days = days, nextDate = next, turning = turning)
 
                     InfoCard {
                         InfoRow(
@@ -112,6 +112,8 @@ fun PersonDetailScreen(
                             InfoRow(Icons.Filled.Star, "Età attuale", "$currentAge anni")
                         }
                     }
+
+                    GiftIdeasCard(person)
 
                     if (person.notes.isNotBlank()) {
                         InfoCard {
@@ -203,7 +205,7 @@ fun PersonDetailScreen(
 }
 
 @Composable
-private fun CountdownCard(days: Int, nextDate: LocalDate, turning: Int?) {
+private fun CountdownCard(person: Person, days: Int, nextDate: LocalDate, turning: Int?) {
     Surface(
         shape = RoundedCornerShape(28.dp),
         color = MaterialTheme.colorScheme.primaryContainer,
@@ -239,7 +241,7 @@ private fun CountdownCard(days: Int, nextDate: LocalDate, turning: Int?) {
             )
             if (days in 1..7) {
                 Text(
-                    countdownLabel(days) + "! Hai pensato al regalo?",
+                    countdownLabel(days) + "! " + if (person.gifts.any { !it.bought }) "Dai un'occhiata alle idee regalo 🎁" else "Hai pensato al regalo?",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold,

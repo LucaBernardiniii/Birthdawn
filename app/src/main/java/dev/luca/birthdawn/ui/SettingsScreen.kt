@@ -32,6 +32,10 @@ import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.AlertDialog
+import dev.luca.birthdawn.util.formatDayMonth
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -86,6 +90,8 @@ fun SettingsScreen(onBack: () -> Unit) {
     val appearance by AppearanceSettings.state.collectAsState()
     var timeLabel by remember { mutableStateOf(Prefs.timeLabel(context)) }
     var showTimePicker by remember { mutableStateOf(false) }
+    var myBirthday by remember { mutableStateOf(Prefs.myBirthday(context)) }
+    var showMyBirthday by remember { mutableStateOf(false) }
 
     fun setMode(mode: AccentMode) = AppearanceSettings.update(context, appearance.copy(mode = mode))
 
@@ -108,6 +114,24 @@ fun SettingsScreen(onBack: () -> Unit) {
                 .verticalScroll(rememberScrollState()),
         ) {
             // ---------- Notifiche ----------
+            SettingsSection("Il tuo compleanno")
+            SettingsCard {
+                ListItem(
+                    headlineContent = {
+                        Text(myBirthday?.let { formatDayMonth(it.day, it.month) + (it.year?.let { y -> " $y" } ?: "") } ?: "Non impostato")
+                    },
+                    supportingContent = {
+                        Text(
+                            if (myBirthday == null) "Inseriscilo e il giorno stesso Birthdawn ti farà gli auguri 🎉"
+                            else "Il giorno stesso riceverai una notifica di auguri"
+                        )
+                    },
+                    leadingContent = { Text("🎂", style = MaterialTheme.typography.titleLarge) },
+                    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                    modifier = Modifier.clickable { showMyBirthday = true },
+                )
+            }
+
             SettingsSection("Notifiche")
             SettingsCard {
                 ListItem(
@@ -245,6 +269,18 @@ fun SettingsScreen(onBack: () -> Unit) {
         }
     }
 
+    if (showMyBirthday) {
+        MyBirthdayDialog(
+            initial = myBirthday,
+            onDismiss = { showMyBirthday = false },
+            onSave = { value ->
+                Prefs.setMyBirthday(context, value)
+                myBirthday = value
+                showMyBirthday = false
+            },
+        )
+    }
+
     if (showTimePicker) {
         val state = rememberTimePickerState(
             initialHour = Prefs.hour(context),
@@ -328,5 +364,79 @@ private fun AccentOption(
                     .background(swatch.copy(alpha = alpha)),
             )
         }
+    }
+}
+
+@Composable
+private fun MyBirthdayDialog(
+    initial: Prefs.MyBirthday?,
+    onDismiss: () -> Unit,
+    onSave: (Prefs.MyBirthday?) -> Unit,
+) {
+    var name by remember { mutableStateOf(initial?.name ?: "") }
+    var month by remember { mutableStateOf(initial?.month ?: 0) }
+    var day by remember { mutableStateOf(initial?.day ?: 0) }
+    var year by remember { mutableStateOf(initial?.year) }
+    var pickDate by remember { mutableStateOf(false) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Il tuo compleanno") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = { Text("Il tuo nome (facoltativo)") },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                Surface(
+                    onClick = { pickDate = true },
+                    shape = RoundedCornerShape(16.dp),
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Column(Modifier.padding(16.dp)) {
+                        Text("Data", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(
+                            if (month == 0) "Scegli la data"
+                            else formatDayMonth(day, month) + (year?.let { " $it" } ?: ""),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Medium,
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(
+                enabled = month != 0,
+                onClick = { onSave(Prefs.MyBirthday(name.trim(), month, day, year)) },
+            ) { Text("Salva") }
+        },
+        dismissButton = {
+            Row {
+                if (initial != null) {
+                    TextButton(onClick = { onSave(null) }) { Text("Rimuovi") }
+                }
+                TextButton(onClick = onDismiss) { Text("Annulla") }
+            }
+        },
+    )
+
+    if (pickDate) {
+        BirthdayDatePicker(
+            initialMonth = month,
+            initialDay = day,
+            initialYear = year,
+            hasExisting = month != 0,
+            onDismiss = { pickDate = false },
+            onConfirm = { m, d, y ->
+                month = m; day = d; year = y
+                pickDate = false
+            },
+        )
     }
 }

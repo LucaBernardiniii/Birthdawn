@@ -49,6 +49,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.luca.birthdawn.data.Person
+import dev.luca.birthdawn.util.birthdayIn
+import dev.luca.birthdawn.notify.Prefs
+import androidx.compose.ui.platform.LocalContext
 import dev.luca.birthdawn.util.ageOn
 import dev.luca.birthdawn.util.countdownLabel
 import dev.luca.birthdawn.util.daysUntil
@@ -78,6 +81,14 @@ fun HomeScreen(
     val carousel = if (!searching) upcoming.take(CAROUSEL_SIZE) else emptyList()
     val grouped = upcoming.groupBy { YearMonth.from(it.nextBirthday(today)) }
 
+    val context = LocalContext.current
+    // (nome, età) se oggi è il compleanno dell'utente
+    val myBirthdayToday = remember(today) {
+        Prefs.myBirthday(context)
+            ?.takeIf { birthdayIn(today.year, it.month, it.day) == today }
+            ?.let { it.name.trim() to it.year?.let { y -> today.year - y } }
+    }
+
     LazyColumn(
         Modifier.fillMaxSize(),
         contentPadding = PaddingValues(
@@ -85,6 +96,11 @@ fun HomeScreen(
             bottom = contentPadding.calculateBottomPadding() + 88.dp,
         ),
     ) {
+        val me = myBirthdayToday
+        if (me != null && !searching) {
+            item(key = "me") { OwnBirthdayCard(me.first, me.second) }
+        }
+
         if (people.isEmpty()) {
             item(key = "empty") { EmptyState() }
             return@LazyColumn
@@ -300,6 +316,39 @@ private fun TodayCard(list: List<Person>, today: LocalDate, onOpen: (Person) -> 
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun OwnBirthdayCard(name: String, age: Int?) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .clip(RoundedCornerShape(28.dp))
+            .background(
+                Brush.linearGradient(
+                    listOf(MaterialTheme.colorScheme.tertiary, MaterialTheme.colorScheme.primary)
+                )
+            )
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text("🥳🎂🎉", fontSize = 40.sp)
+        Spacer(Modifier.height(8.dp))
+        Text(
+            "Buon compleanno" + (name.takeIf { it.isNotEmpty() }?.let { ", $it" } ?: "") + "!",
+            color = Color.White,
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            (age?.takeIf { it > 0 }?.let { "Oggi compi $it anni. " } ?: "") + "Tanti auguri da Birthdawn!",
+            color = Color.White.copy(alpha = 0.9f),
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 

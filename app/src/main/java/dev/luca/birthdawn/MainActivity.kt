@@ -26,6 +26,16 @@ class MainActivity : ComponentActivity() {
     /** Persona da aprire quando si tocca una notifica. */
     private val personToOpen = mutableStateOf<String?>(null)
 
+    /** Testo condiviso da un'altra app (link di un articolo), da salvare come idea regalo. */
+    private val sharedText = mutableStateOf<Pair<String, String?>?>(null)
+
+    private fun handleShare(intent: Intent?) {
+        if (intent?.action == Intent.ACTION_SEND) {
+            val text = intent.getStringExtra(Intent.EXTRA_TEXT)
+            if (!text.isNullOrBlank()) sharedText.value = text to intent.getStringExtra(Intent.EXTRA_SUBJECT)
+        }
+    }
+
     private val notificationPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
 
@@ -41,6 +51,7 @@ class MainActivity : ComponentActivity() {
 
         if (savedInstanceState == null) {
             personToOpen.value = intent?.getStringExtra(Notifier.EXTRA_PERSON_ID)
+            handleShare(intent)
         }
 
         if (Build.VERSION.SDK_INT >= 33 &&
@@ -61,6 +72,8 @@ class MainActivity : ComponentActivity() {
                 App(
                     personToOpen = personToOpen.value,
                     onPersonOpened = { personToOpen.value = null },
+                    shared = sharedText.value,
+                    onSharedHandled = { sharedText.value = null },
                 )
             }
         }
@@ -69,5 +82,6 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         intent.getStringExtra(Notifier.EXTRA_PERSON_ID)?.let { personToOpen.value = it }
+        handleShare(intent)
     }
 }

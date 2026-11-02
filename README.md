@@ -7,6 +7,8 @@ App Android per ricordarsi dei compleanni. Kotlin + Jetpack Compose (Material 3)
 - **Home**: carosello Material 3 con i prossimi compleanni (foto a tutta card), poi l'elenco completo per mese con ricerca e card speciale per chi festeggia oggi.
 - **Barra in alto**: nome dell'app, data di oggi, numero di persone e pulsante impostazioni.
 - **Persona**: pagina di visualizzazione (foto, conto alla rovescia, età, note, notifiche) con pulsante Modifica; in modifica, banner per aggiungere/cambiare foto, nome, data (anche senza anno), note e notifiche personalizzate.
+- **Idee regalo**: per ogni persona, lista di idee con link opzionale (si apre nel browser) e spunta "preso". Da browser o app di shopping: *Condividi → Birthdawn* per salvare un articolo al volo. Le notifiche di promemoria ricordano quante idee hai salvato.
+- **Il tuo compleanno**: impostabile nelle Impostazioni; il giorno stesso ricevi una notifica di auguri e un messaggio in Home.
 - **Calendario**: griglia mensile (swipe o frecce per cambiare mese), giorni con compleanni evidenziati, elenco del giorno e del mese.
 - **Notifiche**: di default 7 giorni prima e il giorno stesso. Per ogni persona puoi scegliere 0/1/3/7/14/30 giorni prima o un numero personalizzato (0–365).
 - **Impostazioni (⚙️)**: tema chiaro/scuro/dispositivo, orario delle notifiche, notifica di prova, colore d'accento (predefinito, sfondo del telefono/Material You, o personalizzato) e "Colore dalla foto" per la pagina di ogni persona.
