@@ -4,14 +4,15 @@
 
 # Birthdawn
 
-### Never miss a birthday again 🎂
+### Never miss a birthday again
 
-A beautiful, private birthday reminder for Android — with gift ideas, photos and a sky that follows the dawn.
+A beautiful, lightweight, private birthday reminder for Android — with gift ideas, photos and a sky that follows the dawn.
 
 <br/>
 
 [![Latest release](https://img.shields.io/github/v/release/LucaBernardinii/Birthdawn?style=for-the-badge&labelColor=0d1117&color=D2552F)](https://github.com/LucaBernardinii/Birthdawn/releases)
 [![Downloads](https://img.shields.io/github/downloads/LucaBernardinii/Birthdawn/total?style=for-the-badge&labelColor=0d1117&color=D2552F)](https://github.com/LucaBernardinii/Birthdawn/releases)
+[![Star on GitHub](https://img.shields.io/github/stars/LucaBernardinii/Birthdawn?style=for-the-badge&logo=github&logoColor=white&labelColor=0d1117&color=D2552F)](https://github.com/LucaBernardinii/Birthdawn/stargazers)
 [![Android 8.0+](https://img.shields.io/badge/Android-8.0%2B-3DDC84?style=for-the-badge&logo=android&logoColor=white&labelColor=0d1117)](#download)
 
 <br/>
@@ -39,7 +40,7 @@ A beautiful, private birthday reminder for Android — with gift ideas, photos a
 <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5_home_material_you.jpg" alt="Home screen with Material You colours and today's birthdays" width="30%" />
 <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6_person_material_you.jpg" alt="Person page with Material You colours" width="30%" />
 
-<sub>🌅 Dawn theme · 🎨 last two: Material You wallpaper colours</sub>
+<sub>🌅 Dawn Theme · 🎨 Dark Material You Wallpaper Colours</sub>
 
 </div>
 
@@ -86,7 +87,6 @@ A beautiful, private birthday reminder for Android — with gift ideas, photos a
 
 #### 🖼️ People & photos
 - Photo banner on every person, with drag & pinch framing
-- Stretchy banner: pull down to see the whole photo
 - Notes, birth year optional (Feb 29 handled too)
 - Each page can take its colours from the person's photo
 
@@ -99,7 +99,6 @@ A beautiful, private birthday reminder for Android — with gift ideas, photos a
 - **Dawn** theme: a sky that fades from blue to sunrise orange
 - Light / Dark / System modes
 - Material You (wallpaper colours) or a custom accent colour
-- Bottom bar that shrinks while you scroll (optional)
 - Built with Material 3, themed icon support
 
 </td>
@@ -150,6 +149,8 @@ A beautiful, private birthday reminder for Android — with gift ideas, photos a
 
 **Updating:** install the new APK over the old one — your data stays. With [Obtainium](https://github.com/ImranR98/Obtainium) you'll get updates automatically.
 
+**Note:** Android might flag the app. The code is open source and can be scanned anytime.
+
 ---
 
 <div align="center">
@@ -167,7 +168,8 @@ Everything — people, photos, gift ideas, settings — is stored only on your p
 | `POST_NOTIFICATIONS` | To remind you of upcoming birthdays |
 | `RECEIVE_BOOT_COMPLETED` | To keep reminders scheduled after you restart your phone |
 
-Gift links open in your own browser or shopping app, outside Birthdawn. Want your data on another phone? Use **Settings → Backup → Export data** and import the file on the new device.
+Gift links open in your own browser or shopping app, outside Birthdawn.
+Want your data on another phone? Use **Settings → Backup → Export data** and import the file on the new device.
 
 ---
 
@@ -239,49 +241,19 @@ Yes. On Android 13+ enable *Themed icons* in your launcher and Birthdawn's monoc
 ---
 
 <div align="center">
+If you've read all the way down here, first of all, thank you.
 
-<h1><a id="build-from-source"></a>Build from source</h1>
+This is my first android project and I hope it'll make your life a bit easier (at least when it comes to reminding birthdays).
+
+<div align="center">
+
+### If I helped you, please consider leaving a ⭐
+
+[![Star on GitHub](https://img.shields.io/badge/%E2%AD%90%20Star%20this%20repo-D2552F?style=for-the-badge&labelColor=0d1117)](https://github.com/LucaBernardinii/Birthdawn/stargazers)
 
 </div>
 
-**With Android Studio:** open the project folder and press ▶️ Run.
-
-**From the command line** (JDK 17):
-
-```bash
-./gradlew assembleRelease
-# → app/build/outputs/apk/release/app-release.apk
-```
-
-Release builds are signed with the key described in `keystore.properties` (not committed). Without it, Gradle falls back to the debug key.
-
-**Continuous integration:** every push to `main` builds a signed APK with GitHub Actions ([`.github/workflows/build.yml`](.github/workflows/build.yml)), and pushing a tag like `v1.9` publishes a GitHub release with `Birthdawn.apk` attached. The workflow expects four repository secrets: `KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`.
-
-<details>
-<summary><b>Project structure</b></summary>
-
-```text
-app/src/main/java/dev/luca/birthdawn/
-├── MainActivity.kt          entry point, language & share handling
-├── data/                    Person, gift ideas, JSON storage, backup/restore
-├── notify/                  daily reminder scheduling, notifications, preferences
-├── ui/                      Home, Calendar, Person, Settings, photo framing, components
-│   └── theme/               Dawn theme, colour schemes, appearance settings
-└── util/                    dates & ages, photos, app language
-app/src/main/res/
-├── values/strings.xml       English texts
-├── values-it/strings.xml    Italian texts
-└── drawable/                adaptive icon (vector), logo, notification icon
-fastlane/metadata/android/   icon & screenshots for app stores
-store/                       icon source (SVG) and PNG exports
-```
-</details>
-
-**Tech:** Kotlin · Jetpack Compose · Material 3 · AndroidX Palette (photo colours) · AlarmManager (reminders) · no other dependencies.
-
 ---
-
-<div align="center">
 
 <br/>
 
