@@ -20,12 +20,13 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        // ID di installazione invariato: così Birthdawn si installa come aggiornamento della versione già sul telefono
-        applicationId = "dev.luca.compleanni"
+        // Dalla 2.0 l'ID è dev.luca.birthdawn (prima dev.luca.compleanni): è un'app nuova per Android,
+        // i dati delle versioni precedenti si portano con Esporta/Importa dati.
+        applicationId = "dev.luca.birthdawn"
         minSdk = 26
         targetSdk = 35
-        versionCode = 10
-        versionName = "1.9"
+        versionCode = 11
+        versionName = "2.0"
     }
 
     signingConfigs {

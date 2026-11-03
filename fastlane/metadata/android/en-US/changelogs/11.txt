@@ -1,0 +1,1 @@
+Birthdawn 2.0: new app ID (dev.luca.birthdawn). Coming from an earlier version? Export your data, install 2.0, then import the backup. Also new: About section with version, source code and links.

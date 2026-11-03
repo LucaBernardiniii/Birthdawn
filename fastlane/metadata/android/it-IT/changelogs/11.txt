@@ -1,0 +1,1 @@
+Birthdawn 2.0: nuovo ID dell'app (dev.luca.birthdawn). Arrivi da una versione precedente? Esporta i dati, installa la 2.0 e importa il backup. Novità: sezione Informazioni con versione, codice sorgente e link.
