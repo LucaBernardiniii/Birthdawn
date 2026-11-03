@@ -1,5 +1,6 @@
 package dev.luca.birthdawn.ui
 
+import dev.luca.birthdawn.util.AppLanguage
 import dev.luca.birthdawn.util.weekdayInitials
 import dev.luca.birthdawn.util.turnsLabel
 import dev.luca.birthdawn.R
@@ -204,7 +205,10 @@ fun CalendarScreen(
         }
 
         item(key = "month-header") {
-            SectionHeader(stringResource(R.string.all_birthdays_in, monthName(ym.monthValue).lowercase()))
+            SectionHeader(stringResource(
+                    R.string.all_birthdays_in,
+                    monthName(ym.monthValue).let { if (AppLanguage.isItalian) it.lowercase() else it },
+                ))
         }
         if (monthPeople.isEmpty()) {
             item(key = "month-empty") {

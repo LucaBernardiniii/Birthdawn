@@ -1,75 +1,288 @@
-# 🎂 Birthdawn
+<div align="center">
 
-App Android per ricordarsi dei compleanni. Kotlin + Jetpack Compose (Material 3), nessuna libreria esterna oltre ad AndroidX.
+<img src="fastlane/metadata/android/en-US/images/icon.png" alt="Birthdawn app icon" width="180" />
 
-## Funzioni
+# Birthdawn
 
-- **Lingue**: italiano e inglese (Impostazioni → Lingua; *Automatica* segue la lingua del telefono). Tutti i testi, le date e le notifiche sono tradotti: i testi sono in `res/values/strings.xml` (inglese) e `res/values-it/strings.xml` (italiano).
+### Never miss a birthday again 🎂
 
-- **Home**: carosello Material 3 con i prossimi compleanni (foto a tutta card), poi l'elenco completo per mese con ricerca, ordinamento (in arrivo, A–Z, da gennaio a dicembre) e card speciale per chi festeggia oggi.
-- **Barra in alto**: nome dell'app, data di oggi, numero di persone e pulsante impostazioni.
-- **Persona**: pagina di visualizzazione con banner elastico (tirando giù si allunga e mostra la foto intera), foto, conto alla rovescia, età, note, notifiche) con pulsante Modifica; in modifica, banner per aggiungere/cambiare foto e scegliere la parte visibile (trascina e pizzica), nome, data (anche senza anno), note e notifiche personalizzate.
-- **Idee regalo**: per ogni persona, lista di idee con link opzionale (si apre nel browser) e spunta "preso". Da browser o app di shopping: *Condividi → Birthdawn* per salvare un articolo al volo. Le notifiche di promemoria ricordano quante idee hai salvato.
-- **Il tuo compleanno**: impostabile nelle Impostazioni; il giorno stesso ricevi una notifica di auguri e un messaggio in Home.
-- **Calendario**: griglia mensile (swipe o frecce per cambiare mese), giorni con compleanni evidenziati, elenco del giorno e del mese.
-- **Notifiche**: di default 7 giorni prima e il giorno stesso. Per ogni persona puoi scegliere 0/1/3/7/14/30 giorni prima o un numero personalizzato (0–365).
-- **Impostazioni (⚙️)**: tema chiaro/scuro/dispositivo, barra di navigazione che si rimpicciolisce scorrendo (o fissa), orario delle notifiche, notifica di prova, aspetto (Alba: sfondo sfumato dall'azzurro all'arancione, predefinito; sfondo del telefono/Material You; colore personalizzato) e "Colore dalla foto" per la pagina di ogni persona.
+A beautiful, private birthday reminder for Android — with gift ideas, photos and a sky that follows the dawn.
 
-Le notifiche sopravvivono al riavvio del telefono; se il telefono era spento all'orario previsto, l'avviso arriva appena si riaccende o si apre l'app.
+<br/>
 
-## Ottenere l'APK con GitHub (consigliato)
+[![Latest release](https://img.shields.io/github/v/release/LucaBernardinii/Birthdawn?style=for-the-badge&labelColor=0d1117&color=D2552F)](https://github.com/LucaBernardinii/Birthdawn/releases)
+[![Downloads](https://img.shields.io/github/downloads/LucaBernardinii/Birthdawn/total?style=for-the-badge&labelColor=0d1117&color=D2552F)](https://github.com/LucaBernardinii/Birthdawn/releases)
+[![Android 8.0+](https://img.shields.io/badge/Android-8.0%2B-3DDC84?style=for-the-badge&logo=android&logoColor=white&labelColor=0d1117)](#download)
 
-1. Crea un repository (anche privato) e carica questa cartella. Il `.gitignore` esclude già keystore e password.
-2. Su GitHub: **Settings → Secrets and variables → Actions** e aggiungi i 4 secret presenti in `FIRMA-SEGRETI.txt`
-   (`KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`).
-3. Ogni push su `main` compila l'app: scarica `Birthdawn-apk` da **Actions → ultima esecuzione → Artifacts**.
-4. Per una release pubblica con l'APK allegato:
-   ```
-   git tag v1.0 && git push --tags
-   ```
+<br/>
 
-Senza i secret l'APK viene comunque compilato, ma firmato con una chiave di debug.
+[![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white&labelColor=0d1117)](https://kotlinlang.org)
+[![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white&labelColor=0d1117)](https://developer.android.com/compose)
+[![Material 3](https://img.shields.io/badge/Material%203-757575?style=for-the-badge&logo=materialdesign&logoColor=white&labelColor=0d1117)](https://m3.material.io)
 
-> ⚠️ Conserva `birthdawn-release.jks` e `FIRMA-SEGRETI.txt` in un posto sicuro (non su GitHub).
-> Gli aggiornamenti dell'app devono essere firmati con la stessa chiave, altrimenti Android non li installa sopra la versione esistente.
+<br/>
 
-## Compilare in locale
+[**Download**](#download) · [**Features**](#features) · [**Privacy**](#privacy) · [**Translate**](#translations) · [**FAQ**](#faq) · [**Build**](#build-from-source)
 
-Apri la cartella con **Android Studio** (Ladybug o più recente) e premi ▶️ oppure:
+</div>
 
+---
+
+<div align="center">
+
+<h1><a id="screenshots"></a>Screenshots</h1>
+
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1_home.jpg" alt="Home screen with the list sorted from January to December" width="23%" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2_person.jpg" alt="Person page with countdown, gift ideas and notes" width="23%" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4_calendar.jpg" alt="Calendar with all birthdays of the month" width="23%" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3_new_person.jpg" alt="Adding a new person with custom notifications" width="23%" />
+
+</div>
+
+---
+
+<div align="center">
+
+<h1><a id="features"></a>Features</h1>
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+
+#### 🎂 Birthdays at a glance
+- Carousel of the next upcoming birthdays
+- Special card for whoever is celebrating today
+- Search, and sort by **upcoming**, **A–Z** or **January → December**
+- Monthly calendar with every birthday marked
+- Age and countdown for everyone
+
+</td>
+    <td width="50%" valign="top">
+
+#### 🔔 Reminders that fit you
+- Notified **7 days before** and **on the day** by default
+- Per-person custom reminders (1 day, 2 weeks, 1 month… or any number of days)
+- Choose the time of day you get notified
+- Reminders survive reboots and phone-off mornings
+- A birthday wish **for you** on your own birthday 🎉
+
+</td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+
+#### 🎁 Gift ideas
+- Save gift ideas for each person, with optional links
+- Open the shop page in one tap, tick ideas off once bought
+- **Share → Birthdawn** from any shopping app or browser to save an item instantly
+- Reminders tell you how many ideas you've saved
+
+</td>
+    <td width="50%" valign="top">
+
+#### 🖼️ People & photos
+- Photo banner on every person, with drag & pinch framing
+- Stretchy banner: pull down to see the whole photo
+- Notes, birth year optional (Feb 29 handled too)
+- Each page can take its colours from the person's photo
+
+</td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+
+#### 🌅 Design
+- **Dawn** theme: a sky that fades from blue to sunrise orange
+- Light / Dark / System modes
+- Material You (wallpaper colours) or a custom accent colour
+- Bottom bar that shrinks while you scroll (optional)
+- Built with Material 3, themed icon support
+
+</td>
+    <td width="50%" valign="top">
+
+#### 💾 Your data, your phone
+- 100% offline: no account, no ads, no tracking
+- One-tap **backup & restore** to a single `.zip` file
+- Backups include people, photos, gift ideas, your birthday and all settings
+- Available in **English** and **Italian**
+
+</td>
+  </tr>
+</table>
+
+</div>
+
+---
+
+<div align="center">
+
+<h1><a id="download"></a>Download</h1>
+
+<table>
+  <tr>
+    <th align="center">GitHub</th>
+    <th align="center">Obtainium</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/LucaBernardinii/Birthdawn/releases/latest/download/Birthdawn.apk">
+        <img src="https://img.shields.io/badge/Download-APK-D2552F?style=for-the-badge&logo=github&logoColor=white&labelColor=0d1117" alt="Download the latest Birthdawn APK from GitHub" height="48">
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/LucaBernardinii/Birthdawn/">
+        <img src="https://img.shields.io/badge/Add%20to-Obtainium-6750A4?style=for-the-badge&labelColor=0d1117" alt="Add Birthdawn to Obtainium for automatic updates" height="48">
+      </a>
+    </td>
+  </tr>
+</table>
+
+<h3>Requires Android 8.0 (Oreo) or newer.</h3>
+
+</div>
+
+**Installing:** download `Birthdawn.apk`, open it and allow installs from your browser or file manager when Android asks. On first launch, allow notifications so Birthdawn can remind you.
+
+**Updating:** install the new APK over the old one — your data stays. With [Obtainium](https://github.com/ImranR98/Obtainium) you'll get updates automatically.
+
+---
+
+<div align="center">
+
+<h1><a id="privacy"></a>Privacy</h1>
+
+<h3>Birthdawn doesn't even ask for internet access.</h3>
+
+</div>
+
+Everything — people, photos, gift ideas, settings — is stored only on your phone. There is no account, no cloud sync, no analytics and no ads. The app only asks for two permissions:
+
+| Permission | Why |
+|---|---|
+| `POST_NOTIFICATIONS` | To remind you of upcoming birthdays |
+| `RECEIVE_BOOT_COMPLETED` | To keep reminders scheduled after you restart your phone |
+
+Gift links open in your own browser or shopping app, outside Birthdawn. Want your data on another phone? Use **Settings → Backup → Export data** and import the file on the new device.
+
+---
+
+<div align="center">
+
+<h1><a id="translations"></a>Translations</h1>
+
+<h3>Birthdawn speaks 🇬🇧 English and 🇮🇹 Italian.</h3>
+
+</div>
+
+Choose the language in **Settings → Language**, or leave it on *Automatic* to follow your phone (Italian if your phone is in Italian, English otherwise). Notifications, dates and the system date/time pickers follow your choice.
+
+**Want Birthdawn in your language?** All texts live in a single file:
+
+1. Copy [`app/src/main/res/values/strings.xml`](app/src/main/res/values/strings.xml) to `app/src/main/res/values-XX/strings.xml` (where `XX` is your language code, e.g. `values-es`, `values-fr`, `values-de`).
+2. Translate the text between the tags. Keep placeholders such as `%1$s` and `%d` as they are.
+3. Open a pull request. Thank you! 💛
+
+---
+
+<div align="center">
+
+<h1><a id="faq"></a>FAQ</h1>
+
+</div>
+
+<details>
+<summary><b>I didn't get a notification. What should I check?</b></summary>
+
+- Open **Settings → Send a test notification**. If nothing appears, notifications are disabled for Birthdawn in Android's settings.
+- Some phones (Xiaomi, Huawei, Samsung…) aggressively stop background apps: set Birthdawn's battery usage to *Unrestricted*.
+- If your phone was off at notification time, the reminder arrives as soon as you turn it on or open the app.
+</details>
+
+<details>
+<summary><b>An update won't install over my current version.</b></summary>
+
+Android only installs updates signed with the same key as the installed app. If you installed an early test build, uninstall it once (export a backup first!) and install the latest release — future updates will install normally.
+</details>
+
+<details>
+<summary><b>What's inside a backup file?</b></summary>
+
+A backup is a normal `.zip` archive:
+
+```text
+manifest.json        backup format and app version
+files/people.json    people, dates, notes, reminders, gift ideas (readable JSON)
+files/photos/        the photos
+prefs/settings.json  your birthday, theme, notification time, language and every other setting
 ```
+
+Anything Birthdawn stores in future versions is included automatically. Importing replaces all current data after asking for confirmation.
+</details>
+
+<details>
+<summary><b>What happens to birthdays on February 29?</b></summary>
+
+In non-leap years they are celebrated — and notified — on February 28.
+</details>
+
+<details>
+<summary><b>Can I theme the app icon?</b></summary>
+
+Yes. On Android 13+ enable *Themed icons* in your launcher and Birthdawn's monochrome sun-and-candle icon will follow your wallpaper colours.
+</details>
+
+---
+
+<div align="center">
+
+<h1><a id="build-from-source"></a>Build from source</h1>
+
+</div>
+
+**With Android Studio:** open the project folder and press ▶️ Run.
+
+**From the command line** (JDK 17):
+
+```bash
 ./gradlew assembleRelease
+# → app/build/outputs/apk/release/app-release.apk
 ```
 
-L'APK firmato con la tua chiave sarà in `app/build/outputs/apk/release/`.
+Release builds are signed with the key described in `keystore.properties` (not committed). Without it, Gradle falls back to the debug key.
 
-## Installare sul telefono
+**Continuous integration:** every push to `main` builds a signed APK with GitHub Actions ([`.github/workflows/build.yml`](.github/workflows/build.yml)), and pushing a tag like `v1.9` publishes a GitHub release with `Birthdawn.apk` attached. The workflow expects four repository secrets: `KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`.
 
-Copia l'APK sul telefono e aprilo; Android chiederà di consentire l'installazione da quella app (file manager / browser). Al primo avvio concedi il permesso per le notifiche.
+<details>
+<summary><b>Project structure</b></summary>
 
-## Struttura
-
-```
+```text
 app/src/main/java/dev/luca/birthdawn/
-├── MainActivity.kt
-├── data/      Person, PeopleRepository (salvataggio JSON locale)
-├── notify/    Notifier, ReminderScheduler (+ receiver allarme/riavvio), Prefs
-├── ui/        App (navigazione), HomeScreen, CalendarScreen, PersonScreen, Components, theme/
-└── util/      Birthdays (calcolo date/età), Photos (import e caricamento foto)
+├── MainActivity.kt          entry point, language & share handling
+├── data/                    Person, gift ideas, JSON storage, backup/restore
+├── notify/                  daily reminder scheduling, notifications, preferences
+├── ui/                      Home, Calendar, Person, Settings, photo framing, components
+│   └── theme/               Dawn theme, colour schemes, appearance settings
+└── util/                    dates & ages, photos, app language
+app/src/main/res/
+├── values/strings.xml       English texts
+├── values-it/strings.xml    Italian texts
+└── drawable/                adaptive icon (vector), logo, notification icon
+fastlane/metadata/android/   icon & screenshots for app stores
+store/                       icon source (SVG) and PNG exports
 ```
+</details>
 
-Requisiti: Android 8.0 (API 26) o superiore.
+**Tech:** Kotlin · Jetpack Compose · Material 3 · AndroidX Palette (photo colours) · AlarmManager (reminders) · no other dependencies.
 
-## Icona
+---
 
-Icona adattiva vettoriale (`res/drawable/ic_launcher_*.xml`): sole che sorge con una candelina, su un gradiente notte → alba. Include la versione monocromatica per le icone a tema (Android 13+). In `store/` ci sono le versioni PNG 512×512 (Play Store) e 1024×1024, più l'SVG sorgente.
+<div align="center">
 
-## Backup
+<br/>
 
-Impostazioni → **Backup** → *Esporta dati* crea un file `.zip` con:
+**Made with ❤️ by [Luca](https://github.com/LucaBernardinii)**
 
-- `manifest.json` – formato e versione del backup
-- `files/` – tutti i file dell'app (`people.json` con persone e idee regalo, `photos/` con le foto)
-- `prefs/` – tutte le impostazioni (il tuo compleanno, aspetto, orario notifiche, ordinamento…) con il loro tipo
+<sub>Birthdawn — because every birthday deserves a sunrise.</sub>
 
-*Importa dati* sostituisce tutti i dati con quelli del backup, dopo una conferma. Il backup include automaticamente qualunque file o impostazione aggiunti in futuro.
+</div>

@@ -1,5 +1,6 @@
 package dev.luca.birthdawn.ui.theme
 
+import androidx.compose.material3.LocalContentColor
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
@@ -291,8 +292,11 @@ fun BirthdawnTheme(dark: Boolean, content: @Composable () -> Unit) {
     }
     CompositionLocalProvider(LocalDarkTheme provides dark, LocalBackdrop provides backdrop) {
         MaterialTheme(colorScheme = scheme) {
-            Box(Modifier.fillMaxSize().screenBackground()) {
-                content()
+            // Testo e icone fuori dalle card usano il colore giusto per lo sfondo (non il nero predefinito)
+            CompositionLocalProvider(LocalContentColor provides scheme.onBackground) {
+                Box(Modifier.fillMaxSize().screenBackground()) {
+                    content()
+                }
             }
         }
     }

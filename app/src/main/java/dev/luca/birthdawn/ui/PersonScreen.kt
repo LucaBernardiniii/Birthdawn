@@ -5,6 +5,8 @@
 
 package dev.luca.birthdawn.ui
 
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.material3.LocalContentColor
 import dev.luca.birthdawn.util.turnsLabel
 import dev.luca.birthdawn.util.formatBirthday
 import dev.luca.birthdawn.R
@@ -483,8 +485,9 @@ fun PhotoAccentTheme(photo: String?, content: @Composable () -> Unit) {
             secondaryContainer = secondaryContainer,
             onSecondaryContainer = onSecondaryContainer,
         ),
-        content = content,
-    )
+    ) {
+        CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onBackground, content = content)
+    }
 }
 
 @Composable

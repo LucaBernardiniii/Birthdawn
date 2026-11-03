@@ -338,6 +338,8 @@ private fun Color.compositeOverBlack(): Color =
 
 @Composable
 private fun TodayCard(list: List<Person>, today: LocalDate, onOpen: (Person) -> Unit) {
+    // Testo leggibile sul gradiente primary → tertiary con qualsiasi tema (Alba, Material You, personalizzato)
+    val onCard = MaterialTheme.colorScheme.onPrimary
     Column(
         Modifier
             .fillMaxWidth()
@@ -352,7 +354,7 @@ private fun TodayCard(list: List<Person>, today: LocalDate, onOpen: (Person) -> 
     ) {
         Text(
             stringResource(R.string.today_celebrating),
-            color = Color.White,
+            color = onCard,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
         )
@@ -360,7 +362,7 @@ private fun TodayCard(list: List<Person>, today: LocalDate, onOpen: (Person) -> 
         list.forEach { person ->
             Surface(
                 onClick = { onOpen(person) },
-                color = Color.White.copy(alpha = 0.18f),
+                color = onCard.copy(alpha = 0.14f),
                 shape = RoundedCornerShape(18.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -373,11 +375,11 @@ private fun TodayCard(list: List<Person>, today: LocalDate, onOpen: (Person) -> 
                 ) {
                     Avatar(person, 52.dp)
                     Column {
-                        Text(person.name, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                        Text(person.name, color = onCard, fontWeight = FontWeight.Bold, fontSize = 18.sp)
                         Text(
                             person.ageOn(today)?.let { turnsLabel(LocalContext.current, it, capitalized = true) }
                                 ?: stringResource(R.string.say_happy_birthday),
-                            color = Color.White.copy(alpha = 0.9f),
+                            color = onCard.copy(alpha = 0.9f),
                             style = MaterialTheme.typography.bodyMedium,
                         )
                     }
@@ -389,6 +391,8 @@ private fun TodayCard(list: List<Person>, today: LocalDate, onOpen: (Person) -> 
 
 @Composable
 private fun OwnBirthdayCard(name: String, age: Int?) {
+    // Testo leggibile sul gradiente primary → tertiary con qualsiasi tema (Alba, Material You, personalizzato)
+    val onCard = MaterialTheme.colorScheme.onPrimary
     Column(
         Modifier
             .fillMaxWidth()
@@ -407,7 +411,7 @@ private fun OwnBirthdayCard(name: String, age: Int?) {
         Text(
             if (name.isNotEmpty()) stringResource(R.string.own_birthday_title_named, name)
             else stringResource(R.string.own_birthday_title),
-            color = Color.White,
+            color = onCard,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
@@ -415,7 +419,7 @@ private fun OwnBirthdayCard(name: String, age: Int?) {
         Text(
             (age?.takeIf { it > 0 }?.let { plural(LocalContext.current, R.plurals.own_birthday_age, it) } ?: "") +
                 stringResource(R.string.own_birthday_wishes),
-            color = Color.White.copy(alpha = 0.9f),
+            color = onCard.copy(alpha = 0.9f),
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
         )
