@@ -1,0 +1,1 @@
+Prima versione pubblica di Birthdawn: carosello dei compleanni, calendario, promemoria personalizzati, idee regalo, banner con foto, tema Alba, backup e ripristino, italiano e inglese.

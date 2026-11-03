@@ -1,0 +1,13 @@
+<p><b>Birthdawn</b> ti ricorda i compleanni che contano, senza account, pubblicità né accesso a internet.</p>
+<ul>
+<li>Carosello dei prossimi compleanni e una scheda speciale per chi festeggia oggi</li>
+<li>Calendario mensile, ricerca e ordinamento (in arrivo, A–Z, gennaio → dicembre)</li>
+<li>Notifiche 7 giorni prima e il giorno stesso, più promemoria personalizzati per ogni persona</li>
+<li>Idee regalo con link: condividi un prodotto da qualsiasi app di shopping direttamente in Birthdawn</li>
+<li>Banner con foto regolabile, note e anno di nascita facoltativo</li>
+<li>Gli auguri per te nel giorno del tuo compleanno</li>
+<li>Tema Alba, Material You o un colore d'accento a scelta; modalità chiara, scura e di sistema</li>
+<li>Backup e ripristino di tutti i dati in un unico file .zip</li>
+<li>Italiano e inglese</li>
+</ul>
+<p>Tutto resta sul tuo telefono. L'app chiede solo i permessi per le notifiche e per l'avvio del telefono.</p>

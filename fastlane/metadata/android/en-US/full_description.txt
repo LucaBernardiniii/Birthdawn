@@ -1,0 +1,13 @@
+<p><b>Birthdawn</b> reminds you of the birthdays that matter, without accounts, ads or internet access.</p>
+<ul>
+<li>Carousel of upcoming birthdays and a special card for whoever celebrates today</li>
+<li>Monthly calendar, search and sorting (upcoming, A–Z, January → December)</li>
+<li>Notifications 7 days before and on the day, plus custom reminders for each person</li>
+<li>Gift ideas with links: share a product from any shopping app straight into Birthdawn</li>
+<li>Photo banner with framing, notes and optional birth year</li>
+<li>A birthday wish for you on your own birthday</li>
+<li>Dawn theme, Material You or a custom accent colour; light, dark and system modes</li>
+<li>Backup and restore of all your data to a single .zip file</li>
+<li>English and Italian</li>
+</ul>
+<p>Everything stays on your phone. The app only asks for notification and boot permissions.</p>

@@ -394,6 +394,10 @@ fun SettingsScreen(onBack: () -> Unit) {
                 modifier = Modifier.padding(horizontal = 28.dp, vertical = 8.dp),
             )
 
+            // ---------- Informazioni ----------
+            SettingsSection(stringResource(R.string.about))
+            AboutSection()
+
             Spacer(Modifier.navigationBarsPadding().height(24.dp))
         }
     }

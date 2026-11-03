@@ -213,4 +213,16 @@
         <item quantity="one">"%d anno! "</item>
         <item quantity="other">"%d anni! "</item>
     </plurals>
+    <!-- Informazioni -->
+    <string name="about">Informazioni</string>
+    <string name="developer_role">Sviluppatore</string>
+    <string name="github_profile">Profilo GitHub</string>
+    <string name="source_code">Codice sorgente</string>
+    <string name="star_on_github">Lascia una stella su GitHub</string>
+    <string name="report_bug">Segnala un problema</string>
+    <string name="report_bug_sub">Apri una segnalazione su GitHub</string>
+    <string name="license">Licenza</string>
+    <string name="license_sub">GNU GPL v3: libera e open source</string>
+    <string name="made_with_love">Fatta con ❤️ in Italia</string>
+    <string name="open_link_failed">Nessuna app può aprire questo link</string>
 </resources>

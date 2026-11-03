@@ -214,4 +214,16 @@
         <item quantity="one">"%d year old! "</item>
         <item quantity="other">"%d years old! "</item>
     </plurals>
+    <!-- Informazioni -->
+    <string name="about">About</string>
+    <string name="developer_role">Developer</string>
+    <string name="github_profile">GitHub profile</string>
+    <string name="source_code">Source code</string>
+    <string name="star_on_github">Star it on GitHub</string>
+    <string name="report_bug">Report a problem</string>
+    <string name="report_bug_sub">Open an issue on GitHub</string>
+    <string name="license">License</string>
+    <string name="license_sub">GNU GPL v3: free and open source</string>
+    <string name="made_with_love">Made with ❤️ in Italy</string>
+    <string name="open_link_failed">No app can open this link</string>
 </resources>
