@@ -1,5 +1,12 @@
 package dev.luca.birthdawn.ui
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -43,8 +50,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import dev.luca.birthdawn.data.PhotoFocus
 import kotlin.math.floor
 import kotlin.math.max
@@ -103,9 +108,12 @@ fun FocusedImage(bitmap: ImageBitmap, focus: PhotoFocus, modifier: Modifier = Mo
     }
 }
 
-/** Schermata per scegliere la parte di foto visibile: trascina per spostare, pizzica per ingrandire. */
+/**
+ * Schermata a tutto schermo per scegliere la parte di foto visibile:
+ * trascina per spostare, pizzica per ingrandire. Conferma con "Fatto" in alto a destra.
+ */
 @Composable
-fun PhotoAdjustDialog(
+fun PhotoAdjustScreen(
     bitmap: ImageBitmap,
     initial: PhotoFocus,
     onDismiss: () -> Unit,
@@ -114,99 +122,125 @@ fun PhotoAdjustDialog(
     var focus by remember { mutableStateOf(initial) }
     val screenWidth = LocalConfiguration.current.screenWidthDp.toFloat()
     val bannerAspect = screenWidth / BANNER_HEIGHT.value
+    val colors = MaterialTheme.colorScheme
 
-    Dialog(
-        onDismissRequest = onDismiss,
-        properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false),
+    BackHandler(onBack = onDismiss)
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(colors.background)
+            // Intercetta i tocchi, così non arrivano alla schermata sotto
+            .pointerInput(Unit) { detectTapGestures { } },
     ) {
-        Column(
+        // Barra in alto: annulla, titolo, conferma
+        Row(
             Modifier
-                .fillMaxSize()
-                .background(Color.Black)
+                .fillMaxWidth()
                 .statusBarsPadding()
-                .navigationBarsPadding()
-                .padding(vertical = 16.dp),
-            verticalArrangement = Arrangement.Center,
+                .padding(horizontal = 4.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
+            IconButton(onClick = onDismiss) {
+                Icon(Icons.Filled.Close, contentDescription = "Annulla")
+            }
             Text(
                 "Regola la foto",
-                color = Color.White,
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(horizontal = 20.dp),
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.weight(1f),
             )
-            Text(
-                "Trascina per spostare, pizzica con due dita per ingrandire",
-                color = Color.White.copy(alpha = 0.7f),
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
-            )
-            Spacer(Modifier.weight(1f))
+            Button(
+                onClick = { onConfirm(focus) },
+                modifier = Modifier.padding(end = 8.dp),
+            ) {
+                Icon(Icons.Filled.Check, contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.size(6.dp))
+                Text("Fatto")
+            }
+        }
 
-            // Anteprima del banner
+        Text(
+            "Trascina per spostare, pizzica con due dita per ingrandire",
+            color = colors.onSurfaceVariant,
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(horizontal = 20.dp),
+        )
+
+        Spacer(Modifier.weight(1f))
+
+        // Anteprima del banner, a tutta larghezza come nella pagina della persona
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .aspectRatio(bannerAspect)
+                .clip(RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
+                .pointerInput(bitmap) {
+                    val iw = bitmap.width.toFloat()
+                    val ih = bitmap.height.toFloat()
+                    detectTransformGestures { _, pan, zoomChange, _ ->
+                        val w = size.width.toFloat()
+                        val h = size.height.toFloat()
+                        val current = focus
+                        val zoom = (current.zoom * zoomChange).coerceIn(1f, MAX_PHOTO_ZOOM)
+                        val scale = max(w / iw, h / ih) * zoom
+                        focus = clampFocus(
+                            PhotoFocus(
+                                x = current.x - pan.x / (scale * iw),
+                                y = current.y - pan.y / (scale * ih),
+                                zoom = zoom,
+                            ),
+                            iw, ih, w, h,
+                        )
+                    }
+                },
+        ) {
+            FocusedImage(bitmap, focus, Modifier.fillMaxSize())
+        }
+
+        Spacer(Modifier.height(24.dp))
+
+        // Anteprima dell'avatar rotondo
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             Box(
                 Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(bannerAspect)
-                    .clip(RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
-                    .pointerInput(bitmap) {
-                        val iw = bitmap.width.toFloat()
-                        val ih = bitmap.height.toFloat()
-                        detectTransformGestures { _, pan, zoomChange, _ ->
-                            val w = size.width.toFloat()
-                            val h = size.height.toFloat()
-                            val current = focus
-                            val zoom = (current.zoom * zoomChange).coerceIn(1f, MAX_PHOTO_ZOOM)
-                            val scale = max(w / iw, h / ih) * zoom
-                            focus = clampFocus(
-                                PhotoFocus(
-                                    x = current.x - pan.x / (scale * iw),
-                                    y = current.y - pan.y / (scale * ih),
-                                    zoom = zoom,
-                                ),
-                                iw, ih, w, h,
-                            )
-                        }
-                    },
+                    .size(56.dp)
+                    .clip(CircleShape)
+                    .border(2.dp, colors.outlineVariant, CircleShape),
             ) {
                 FocusedImage(bitmap, focus, Modifier.fillMaxSize())
             }
+            Spacer(Modifier.size(12.dp))
+            Text(
+                "Così apparirà anche nelle liste",
+                color = colors.onSurfaceVariant,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.weight(1f),
+            )
+        }
 
-            Spacer(Modifier.height(24.dp))
-            // Anteprima dell'avatar rotondo
-            Row(
-                Modifier.fillMaxWidth().padding(horizontal = 20.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Box(
-                    Modifier
-                        .size(56.dp)
-                        .clip(CircleShape)
-                        .border(2.dp, Color.White.copy(alpha = 0.6f), CircleShape),
-                ) {
-                    FocusedImage(bitmap, focus, Modifier.fillMaxSize())
-                }
-                Spacer(Modifier.size(12.dp))
-                Text(
-                    "Così apparirà anche nelle liste",
-                    color = Color.White.copy(alpha = 0.7f),
-                    style = MaterialTheme.typography.bodySmall,
-                )
-            }
+        Spacer(Modifier.weight(1f))
 
-            Spacer(Modifier.weight(1f))
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                TextButton(onClick = { focus = PhotoFocus() }) { Text("Ripristina", color = Color.White) }
-                Spacer(Modifier.weight(1f))
-                OutlinedButton(onClick = onDismiss) { Text("Annulla", color = Color.White) }
-                Button(onClick = { onConfirm(focus) }) { Text("Fatto", textAlign = TextAlign.Center) }
-            }
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(horizontal = 20.dp, vertical = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            OutlinedButton(
+                onClick = { focus = PhotoFocus() },
+                modifier = Modifier.weight(1f),
+            ) { Text("Ripristina") }
+            Button(
+                onClick = { onConfirm(focus) },
+                modifier = Modifier.weight(1f),
+            ) { Text("Conferma") }
         }
     }
 }

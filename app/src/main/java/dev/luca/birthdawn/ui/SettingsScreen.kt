@@ -180,6 +180,31 @@ fun SettingsScreen(onBack: () -> Unit) {
                 }
             }
 
+            SettingsSection("Barra di navigazione")
+            SettingsCard {
+                ListItem(
+                    headlineContent = { Text("Rimpicciolisci scorrendo") },
+                    supportingContent = {
+                        Text(
+                            if (appearance.shrinkNavBar) "La barra in basso diventa compatta quando scorri verso il basso"
+                            else "La barra in basso resta sempre della stessa dimensione"
+                        )
+                    },
+                    trailingContent = {
+                        Switch(
+                            checked = appearance.shrinkNavBar,
+                            onCheckedChange = {
+                                AppearanceSettings.update(context, appearance.copy(shrinkNavBar = it))
+                            },
+                        )
+                    },
+                    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                    modifier = Modifier.clickable {
+                        AppearanceSettings.update(context, appearance.copy(shrinkNavBar = !appearance.shrinkNavBar))
+                    },
+                )
+            }
+
             SettingsSection("Colore d'accento")
             SettingsCard {
                 AccentOption(

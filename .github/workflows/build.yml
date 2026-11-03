@@ -71,6 +71,16 @@ jobs:
           echo "✅ Secret corretti: l'APK verrà firmato con la tua chiave."
           keytool -list -v -keystore "$RUNNER_TEMP/release.jks" -storepass "$store_pw" -alias "$alias" | grep "SHA256:"
 
+      # Il codice ora sta in dev/luca/birthdawn: se nel repository è rimasta la vecchia
+      # cartella dev/luca/compleanni (es. dopo un "Upload files" da GitHub), la ignora.
+      - name: Rimuovi codice vecchio rimasto nel repository
+        run: |
+          OLD=app/src/main/java/dev/luca/compleanni
+          if [ -d "$OLD" ]; then
+            echo "::warning::Trovata la vecchia cartella $OLD: ignorata per questa build. Eliminala dal repository."
+            rm -rf "$OLD"
+          fi
+
       - name: Compila APK release
         run: |
           chmod +x gradlew

@@ -370,20 +370,21 @@ fun PersonScreen(
                 }
             }
         }
-    }
 
-    if (showAdjust) {
-        val bitmap = rememberPhoto(photo, 1400)
-        if (bitmap != null) {
-            PhotoAdjustDialog(
-                bitmap = bitmap,
-                initial = focus,
-                onDismiss = { showAdjust = false },
-                onConfirm = {
-                    setFocus(it)
-                    showAdjust = false
-                },
-            )
+        // Schermata "Regola la foto", sopra a tutto il resto
+        if (showAdjust) {
+            val bitmap = rememberPhoto(photo, 1400)
+            if (bitmap != null) {
+                PhotoAdjustScreen(
+                    bitmap = bitmap,
+                    initial = focus,
+                    onDismiss = { showAdjust = false },
+                    onConfirm = {
+                        setFocus(it)
+                        showAdjust = false
+                    },
+                )
+            }
         }
     }
 

@@ -3,6 +3,34 @@
 package dev.luca.birthdawn.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.NavigationBarDefaults
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
+import dev.luca.birthdawn.ui.theme.AppearanceSettings
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -156,8 +184,31 @@ private fun MainScreen(
     content: @Composable (androidx.compose.foundation.layout.PaddingValues) -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val appearance by AppearanceSettings.state.collectAsState()
+    val shrinkEnabled = appearance.shrinkNavBar
+
+    // Barra in basso compatta quando si scorre verso il basso, normale quando si torna su
+    var collapsed by remember { mutableStateOf(false) }
+    LaunchedEffect(tab, shrinkEnabled) { collapsed = false }
+    val collapseConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                if (available.y < -6f) collapsed = true
+                else if (available.y > 6f) collapsed = false
+                return Offset.Zero
+            }
+        }
+    }
+    val collapse by animateFloatAsState(
+        targetValue = if (shrinkEnabled && collapsed) 1f else 0f,
+        animationSpec = tween(250),
+        label = "navCollapse",
+    )
+
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier
+            .nestedScroll(collapseConnection)
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
                 title = {
@@ -180,7 +231,9 @@ private fun MainScreen(
             )
         },
         bottomBar = {
-            NavigationBar {
+            if (shrinkEnabled) {
+                ShrinkingNavBar(tab = tab, onTab = onTab, collapse = collapse)
+            } else NavigationBar {
                 NavigationBarItem(
                     selected = tab == 0,
                     onClick = { onTab(0) },
@@ -198,6 +251,7 @@ private fun MainScreen(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = onAdd,
+                expanded = collapse < 0.5f,
                 icon = { Icon(Icons.Filled.Add, contentDescription = null) },
                 text = { Text("Aggiungi") },
                 containerColor = MaterialTheme.colorScheme.primary,
@@ -206,4 +260,74 @@ private fun MainScreen(
         },
         content = content,
     )
+}
+
+private val NAV_ITEMS = listOf(
+    Icons.Filled.Home to "Home",
+    Icons.Filled.DateRange to "Calendario",
+)
+
+/**
+ * Barra di navigazione che passa da normale (80dp, con etichette)
+ * a compatta (56dp, solo icone) in base a [collapse] (0 = normale, 1 = compatta).
+ */
+@Composable
+private fun ShrinkingNavBar(tab: Int, onTab: (Int) -> Unit, collapse: Float) {
+    val colors = MaterialTheme.colorScheme
+    Surface(color = colors.surfaceContainer) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .windowInsetsPadding(NavigationBarDefaults.windowInsets)
+                .height(lerp(80.dp, 56.dp, collapse)),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            NAV_ITEMS.forEachIndexed { index, (icon, label) ->
+                val selected = tab == index
+                Column(
+                    Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .selectable(
+                            selected = selected,
+                            onClick = { onTab(index) },
+                            role = Role.Tab,
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                        ),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    Box(
+                        Modifier
+                            .clip(CircleShape)
+                            .background(if (selected) colors.secondaryContainer else Color.Transparent)
+                            .padding(horizontal = 20.dp, vertical = 4.dp),
+                    ) {
+                        Icon(
+                            icon,
+                            contentDescription = label,
+                            tint = if (selected) colors.onSecondaryContainer else colors.onSurfaceVariant,
+                        )
+                    }
+                    // L'etichetta sfuma e si restringe man mano che la barra diventa compatta
+                    if (collapse < 1f) {
+                        Box(
+                            Modifier
+                                .height(lerp(20.dp, 0.dp, collapse))
+                                .graphicsLayer { alpha = 1f - collapse }
+                                .padding(top = 4.dp),
+                        ) {
+                            Text(
+                                label,
+                                style = MaterialTheme.typography.labelMedium,
+                                color = if (selected) colors.onSurface else colors.onSurfaceVariant,
+                                maxLines = 1,
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

@@ -15,6 +15,8 @@ data class Appearance(
     /** Colora la pagina di ogni persona con il colore preso dalla sua foto. */
     val photoAccent: Boolean = true,
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
+    /** La barra di navigazione in basso si rimpicciolisce scorrendo verso il basso. */
+    val shrinkNavBar: Boolean = true,
 )
 
 /** Impostazioni di aspetto, osservabili dalla UI. */
@@ -33,6 +35,7 @@ object AppearanceSettings {
             }.getOrDefault(AccentMode.APP),
             customColor = sp.getInt("accent_color", Appearance().customColor),
             photoAccent = sp.getBoolean("photo_accent", true),
+            shrinkNavBar = sp.getBoolean("shrink_nav_bar", true),
             themeMode = runCatching {
                 ThemeMode.valueOf(sp.getString("theme_mode", ThemeMode.SYSTEM.name)!!)
             }.getOrDefault(ThemeMode.SYSTEM),
@@ -46,6 +49,7 @@ object AppearanceSettings {
             .putInt("accent_color", appearance.customColor)
             .putBoolean("photo_accent", appearance.photoAccent)
             .putString("theme_mode", appearance.themeMode.name)
+            .putBoolean("shrink_nav_bar", appearance.shrinkNavBar)
             .apply()
     }
 }
