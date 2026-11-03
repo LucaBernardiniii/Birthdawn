@@ -32,10 +32,14 @@ A beautiful, private birthday reminder for Android — with gift ideas, photos a
 
 <h1><a id="screenshots"></a>Screenshots</h1>
 
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1_home.jpg" alt="Home screen with the list sorted from January to December" width="23%" />
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2_person.jpg" alt="Person page with countdown, gift ideas and notes" width="23%" />
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4_calendar.jpg" alt="Calendar with all birthdays of the month" width="23%" />
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3_new_person.jpg" alt="Adding a new person with custom notifications" width="23%" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1_home.jpg" alt="Home screen with the Dawn theme" width="30%" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2_person.jpg" alt="Person page with countdown, gift ideas and notes" width="30%" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4_calendar.jpg" alt="Calendar with all birthdays of the month" width="30%" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3_new_person.jpg" alt="Adding a new person with custom notifications" width="30%" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5_home_material_you.jpg" alt="Home screen with Material You colours and today's birthdays" width="30%" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6_person_material_you.jpg" alt="Person page with Material You colours" width="30%" />
+
+<sub>🌅 Dawn theme · 🎨 last two: Material You wallpaper colours</sub>
 
 </div>
 
