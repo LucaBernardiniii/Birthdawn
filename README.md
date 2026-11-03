@@ -10,9 +10,9 @@ A beautiful, lightweight, private birthday reminder for Android — with gift id
 
 <br/>
 
-[![Latest release](https://img.shields.io/github/v/release/LucaBernardiniii/Birthdawn?style=for-the-badge&labelColor=0d1117&color=D2552F)](https://github.com/LucaBernardinii/Birthdawn/releases)
-[![Downloads](https://img.shields.io/github/downloads/LucaBernardiniii/Birthdawn/total?style=for-the-badge&labelColor=0d1117&color=D2552F)](https://github.com/LucaBernardinii/Birthdawn/releases)
-[![Star on GitHub](https://img.shields.io/github/stars/LucaBernardiniii/Birthdawn?style=for-the-badge&logo=github&logoColor=white&labelColor=0d1117&color=D2552F)](https://github.com/LucaBernardinii/Birthdawn/stargazers)
+[![Latest release](https://img.shields.io/github/v/release/LucaBernardiniii/Birthdawn?style=for-the-badge&labelColor=0d1117&color=D2552F)](https://github.com/LucaBernardiniii/Birthdawn/releases)
+[![Downloads](https://img.shields.io/github/downloads/LucaBernardiniii/Birthdawn/total?style=for-the-badge&labelColor=0d1117&color=D2552F)](https://github.com/LucaBernardiniii/Birthdawn/releases)
+[![Star on GitHub](https://img.shields.io/github/stars/LucaBernardiniii/Birthdawn?style=for-the-badge&logo=github&logoColor=white&labelColor=0d1117&color=D2552F)](https://github.com/LucaBernardiniii/Birthdawn/stargazers)
 [![Android 8.0+](https://img.shields.io/badge/Android-8.0%2B-3DDC84?style=for-the-badge&logo=android&logoColor=white&labelColor=0d1117)](#download)
 
 <br/>
