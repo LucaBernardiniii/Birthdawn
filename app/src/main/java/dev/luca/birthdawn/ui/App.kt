@@ -3,6 +3,11 @@
 package dev.luca.birthdawn.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.ui.res.painterResource
+import dev.luca.birthdawn.R
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -213,14 +218,24 @@ private fun MainScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Column {
-                        Text("Birthdawn", fontWeight = FontWeight.Bold)
-                        Text(
-                            formatLongDate(today) + " · " +
-                                if (peopleCount == 1) "1 persona" else "$peopleCount persone",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        // Logo: la versione monocromatica dell'icona, nel colore d'accento
+                        Icon(
+                            painter = painterResource(R.drawable.ic_logo),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(width = 44.dp, height = 32.dp),
                         )
+                        Spacer(Modifier.width(10.dp))
+                        Column {
+                            Text("Birthdawn", fontWeight = FontWeight.Bold)
+                            Text(
+                                formatLongDate(today) + " · " +
+                                    if (peopleCount == 1) "1 persona" else "$peopleCount persone",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
                     }
                 },
                 actions = {

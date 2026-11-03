@@ -57,3 +57,7 @@ app/src/main/java/dev/luca/birthdawn/
 ```
 
 Requisiti: Android 8.0 (API 26) o superiore.
+
+## Icona
+
+Icona adattiva vettoriale (`res/drawable/ic_launcher_*.xml`): sole che sorge con una candelina, su un gradiente notte → alba. Include la versione monocromatica per le icone a tema (Android 13+). In `store/` ci sono le versioni PNG 512×512 (Play Store) e 1024×1024, più l'SVG sorgente.

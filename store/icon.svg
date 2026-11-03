@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 108 108">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0" y2="108" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#13193D"/><stop offset="0.15" stop-color="#1E1B42"/><stop offset="0.32" stop-color="#3B2148"/><stop offset="0.5" stop-color="#522542"/><stop offset="0.7" stop-color="#632838"/><stop offset="0.86" stop-color="#742D30"/><stop offset="1" stop-color="#792F2E"/></linearGradient>
+<radialGradient id="glow" cx="54" cy="74" r="58" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FF9A5C" stop-opacity="0.45"/><stop offset="0.45" stop-color="#FF7A4C" stop-opacity="0.16"/><stop offset="1" stop-color="#FF7A4C" stop-opacity="0"/></radialGradient>
+<linearGradient id="sun" x1="0" y1="52" x2="0" y2="72" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFE08A"/><stop offset="1" stop-color="#FF8C42"/></linearGradient>
+<linearGradient id="flame" x1="0" y1="31.5" x2="0" y2="43.8" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFF3B0"/><stop offset="1" stop-color="#FFB347"/></linearGradient>
+<radialGradient id="fglow" cx="54" cy="38.5" r="10" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFD27A" stop-opacity="0.5"/><stop offset="1" stop-color="#FFD27A" stop-opacity="0"/></radialGradient>
+<clipPath id="cand"><path d="M50,72 L50,45.5 Q50,44 51.5,44 L56.5,44 Q58,44 58,45.5 L58,72 Z"/></clipPath>
+</defs>
+<rect width="108" height="108" fill="url(#bg)"/><rect width="108" height="108" fill="url(#glow)"/>
+<line x1="77.30" y1="64.43" x2="82.06" y2="62.88" stroke="#FFC46B" stroke-opacity="0.9" stroke-width="2.6" stroke-linecap="round"/>
+<line x1="72.21" y1="55.61" x2="75.92" y2="52.26" stroke="#FFC46B" stroke-opacity="0.9" stroke-width="2.6" stroke-linecap="round"/>
+<line x1="63.97" y1="49.62" x2="66.00" y2="45.05" stroke="#FFC46B" stroke-opacity="0.9" stroke-width="2.6" stroke-linecap="round"/>
+<line x1="44.03" y1="49.62" x2="42.00" y2="45.05" stroke="#FFC46B" stroke-opacity="0.9" stroke-width="2.6" stroke-linecap="round"/>
+<line x1="35.79" y1="55.61" x2="32.08" y2="52.26" stroke="#FFC46B" stroke-opacity="0.9" stroke-width="2.6" stroke-linecap="round"/>
+<line x1="30.70" y1="64.43" x2="25.94" y2="62.88" stroke="#FFC46B" stroke-opacity="0.9" stroke-width="2.6" stroke-linecap="round"/>
+<path d="M34,72 A20,20 0 0 1 74,72 Z" fill="url(#sun)"/>
+<line x1="28" y1="72" x2="80" y2="72" stroke="#FFD9A8" stroke-opacity="0.85" stroke-width="1.6" stroke-linecap="round"/>
+<line x1="42" y1="76" x2="66" y2="76" stroke="#FFB067" stroke-opacity="0.55" stroke-width="1.6" stroke-linecap="round"/>
+<line x1="46" y1="79.5" x2="62" y2="79.5" stroke="#FFB067" stroke-opacity="0.4" stroke-width="1.6" stroke-linecap="round"/>
+<line x1="50" y1="83" x2="58" y2="83" stroke="#FFB067" stroke-opacity="0.28" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M50,72 L50,45.5 Q50,44 51.5,44 L56.5,44 Q58,44 58,45.5 L58,72 Z" fill="#FFF6EC"/>
+<g clip-path="url(#cand)"><path d="M50,49 L58,45 L58,48 L50,52 Z" fill="#8FCBF0"/><path d="M50,56 L58,52 L58,55 L50,59 Z" fill="#8FCBF0"/><path d="M50,63 L58,59 L58,62 L50,66 Z" fill="#8FCBF0"/><path d="M50,70 L58,66 L58,69 L50,73 Z" fill="#8FCBF0"/><rect x="56.3" y="44" width="2" height="28" fill="#000000" fill-opacity="0.07"/></g>
+<line x1="54" y1="41.6" x2="54" y2="44" stroke="#3A2A2A" stroke-width="1" stroke-linecap="round"/>
+<circle cx="54" cy="38.5" r="10" fill="url(#fglow)"/>
+<path d="M54,31.5 C56.9,35.3 58.3,37.6 58.3,39.5 A4.3,4.3 0 0 1 49.7,39.5 C49.7,37.6 51.1,35.3 54,31.5 Z" fill="url(#flame)"/><path d="M54,35.4 C55.4,37.2 56.1,38.5 56.1,39.6 A2.1,2.1 0 0 1 51.9,39.6 C51.9,38.5 52.6,37.2 54,35.4 Z" fill="#FFFBE6"/>
+</svg>

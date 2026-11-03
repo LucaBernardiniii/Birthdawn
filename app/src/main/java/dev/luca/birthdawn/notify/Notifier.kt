@@ -91,7 +91,7 @@ object Notifier {
         )
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
-            .setColor(0xFFE8505B.toInt())
+            .setColor(0xFFD2552F.toInt())
             .setContentTitle(title)
             .setContentText(text)
             .setContentIntent(pending)

@@ -178,10 +178,12 @@ private val DawnLightStops = arrayOf(
 )
 
 private val DawnDarkStops = arrayOf(
-    0.00f to Color(0xFF0A1430), // blu notte
-    0.35f to Color(0xFF1B1F4A),
-    0.65f to Color(0xFF4B2347), // viola
-    1.00f to Color(0xFF8A3324), // rosso brace
+    0.00f to Color(0xFF13193D), // blu notte (lo stesso gradiente dell'icona)
+    0.15f to Color(0xFF1E1B42),
+    0.32f to Color(0xFF3B2148), // viola
+    0.50f to Color(0xFF522542),
+    0.70f to Color(0xFF632838),
+    1.00f to Color(0xFF792F2E), // rosso brace
 )
 
 fun dawnBackdrop(dark: Boolean): Backdrop {
