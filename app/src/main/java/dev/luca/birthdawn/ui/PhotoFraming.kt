@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import dev.luca.birthdawn.data.PhotoFocus
+import dev.luca.birthdawn.ui.theme.screenBackground
 import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
@@ -129,7 +130,7 @@ fun PhotoAdjustScreen(
     Column(
         Modifier
             .fillMaxSize()
-            .background(colors.background)
+            .screenBackground()
             // Intercetta i tocchi, così non arrivano alla schermata sotto
             .pointerInput(Unit) { detectTapGestures { } },
     ) {

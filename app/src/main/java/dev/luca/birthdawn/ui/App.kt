@@ -31,6 +31,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import dev.luca.birthdawn.ui.theme.AppearanceSettings
+import dev.luca.birthdawn.ui.theme.barColor
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -228,12 +229,16 @@ private fun MainScreen(
                     }
                 },
                 scrollBehavior = scrollBehavior,
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent,
+                    scrolledContainerColor = barColor(top = true),
+                ),
             )
         },
         bottomBar = {
             if (shrinkEnabled) {
                 ShrinkingNavBar(tab = tab, onTab = onTab, collapse = collapse)
-            } else NavigationBar {
+            } else NavigationBar(containerColor = barColor(top = false)) {
                 NavigationBarItem(
                     selected = tab == 0,
                     onClick = { onTab(0) },
@@ -274,7 +279,7 @@ private val NAV_ITEMS = listOf(
 @Composable
 private fun ShrinkingNavBar(tab: Int, onTab: (Int) -> Unit, collapse: Float) {
     val colors = MaterialTheme.colorScheme
-    Surface(color = colors.surfaceContainer) {
+    Surface(color = barColor(top = false)) {
         Row(
             Modifier
                 .fillMaxWidth()

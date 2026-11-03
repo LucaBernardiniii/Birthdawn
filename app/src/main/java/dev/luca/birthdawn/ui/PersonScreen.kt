@@ -444,7 +444,16 @@ fun PhotoAccentTheme(photo: String?, content: @Composable () -> Unit) {
     }
     val base = MaterialTheme.colorScheme
     val target = remember(seed, dark, base) {
-        seed?.let { schemeFromSeed(Color(it), dark) } ?: base
+        seed?.let {
+            val fromPhoto = schemeFromSeed(Color(it), dark)
+            // Tema Alba (sfondo trasparente): la foto cambia solo gli accenti, il cielo resta visibile
+            if (base.background.alpha < 1f) fromPhoto.copy(
+                background = base.background,
+                surface = base.surface,
+                surfaceContainerLow = base.surfaceContainerLow,
+                surfaceContainer = base.surfaceContainer,
+            ) else fromPhoto
+        } ?: base
     }
     val spec = tween<Color>(durationMillis = 450)
     val primary by animateColorAsState(target.primary, spec, label = "primary")

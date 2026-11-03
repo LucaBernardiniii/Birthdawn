@@ -11,7 +11,7 @@ App Android per ricordarsi dei compleanni. Kotlin + Jetpack Compose (Material 3)
 - **Il tuo compleanno**: impostabile nelle Impostazioni; il giorno stesso ricevi una notifica di auguri e un messaggio in Home.
 - **Calendario**: griglia mensile (swipe o frecce per cambiare mese), giorni con compleanni evidenziati, elenco del giorno e del mese.
 - **Notifiche**: di default 7 giorni prima e il giorno stesso. Per ogni persona puoi scegliere 0/1/3/7/14/30 giorni prima o un numero personalizzato (0–365).
-- **Impostazioni (⚙️)**: tema chiaro/scuro/dispositivo, barra di navigazione che si rimpicciolisce scorrendo (o fissa), orario delle notifiche, notifica di prova, colore d'accento (predefinito, sfondo del telefono/Material You, o personalizzato) e "Colore dalla foto" per la pagina di ogni persona.
+- **Impostazioni (⚙️)**: tema chiaro/scuro/dispositivo, barra di navigazione che si rimpicciolisce scorrendo (o fissa), orario delle notifiche, notifica di prova, aspetto (Alba: sfondo sfumato dall'azzurro all'arancione, predefinito; sfondo del telefono/Material You; colore personalizzato) e "Colore dalla foto" per la pagina di ogni persona.
 
 Le notifiche sopravvivono al riavvio del telefono; se il telefono era spento all'orario previsto, l'avviso arriva appena si riaccende o si apre l'app.
 

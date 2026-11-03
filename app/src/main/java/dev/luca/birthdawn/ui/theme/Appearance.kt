@@ -4,13 +4,14 @@ import android.content.Context
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-enum class AccentMode { APP, SYSTEM, CUSTOM }
+/** DAWN = sfondo sfumato "alba" (predefinito), SYSTEM = colori dello sfondo del telefono, CUSTOM = colore scelto. */
+enum class AccentMode { DAWN, SYSTEM, CUSTOM }
 
 /** Tema chiaro, scuro o come il dispositivo. */
 enum class ThemeMode { SYSTEM, LIGHT, DARK }
 
 data class Appearance(
-    val mode: AccentMode = AccentMode.APP,
+    val mode: AccentMode = AccentMode.DAWN,
     val customColor: Int = 0xFF1E88E5.toInt(),
     /** Colora la pagina di ogni persona con il colore preso dalla sua foto. */
     val photoAccent: Boolean = true,
@@ -31,8 +32,8 @@ object AppearanceSettings {
         val sp = sp(context)
         _state.value = Appearance(
             mode = runCatching {
-                AccentMode.valueOf(sp.getString("accent_mode", AccentMode.APP.name)!!)
-            }.getOrDefault(AccentMode.APP),
+                AccentMode.valueOf(sp.getString("accent_mode", AccentMode.DAWN.name)!!)
+            }.getOrDefault(AccentMode.DAWN),
             customColor = sp.getInt("accent_color", Appearance().customColor),
             photoAccent = sp.getBoolean("photo_accent", true),
             shrinkNavBar = sp.getBoolean("shrink_nav_bar", true),

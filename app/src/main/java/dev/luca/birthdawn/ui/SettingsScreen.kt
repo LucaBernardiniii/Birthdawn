@@ -63,6 +63,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -73,7 +74,9 @@ import dev.luca.birthdawn.notify.Prefs
 import dev.luca.birthdawn.notify.ReminderScheduler
 import dev.luca.birthdawn.ui.theme.AccentMode
 import dev.luca.birthdawn.ui.theme.ThemeMode
-import dev.luca.birthdawn.ui.theme.AppAccent
+import dev.luca.birthdawn.ui.theme.LocalDarkTheme
+import dev.luca.birthdawn.ui.theme.dawnBackdrop
+import dev.luca.birthdawn.ui.theme.barColor
 import dev.luca.birthdawn.ui.theme.AppearanceSettings
 import dev.luca.birthdawn.ui.theme.supportsDynamicColor
 
@@ -205,15 +208,16 @@ fun SettingsScreen(onBack: () -> Unit) {
                 )
             }
 
-            SettingsSection("Colore d'accento")
+            SettingsSection("Aspetto")
             SettingsCard {
                 AccentOption(
-                    title = "Predefinito",
-                    subtitle = "Il corallo di Birthdawn",
-                    swatch = AppAccent,
-                    selected = appearance.mode == AccentMode.APP,
+                    title = "Alba (predefinito)",
+                    subtitle = "Sfondo che sfuma dall'azzurro del cielo all'arancione del sole",
+                    swatch = null,
+                    swatchBrush = dawnBackdrop(LocalDarkTheme.current).brush,
+                    selected = appearance.mode == AccentMode.DAWN,
                     enabled = true,
-                    onClick = { setMode(AccentMode.APP) },
+                    onClick = { setMode(AccentMode.DAWN) },
                 )
                 val systemColor = remember {
                     if (supportsDynamicColor) dynamicLightColorScheme(context).primary else null
@@ -359,6 +363,7 @@ private fun AccentOption(
     title: String,
     subtitle: String,
     swatch: Color?,
+    swatchBrush: Brush? = null,
     selected: Boolean,
     enabled: Boolean,
     onClick: () -> Unit,
@@ -380,7 +385,15 @@ private fun AccentOption(
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = alpha),
             )
         }
-        if (swatch != null) {
+        if (swatchBrush != null) {
+            Box(
+                Modifier
+                    .padding(end = 12.dp)
+                    .size(28.dp)
+                    .clip(CircleShape)
+                    .background(swatchBrush),
+            )
+        } else if (swatch != null) {
             Box(
                 Modifier
                     .padding(end = 12.dp)
