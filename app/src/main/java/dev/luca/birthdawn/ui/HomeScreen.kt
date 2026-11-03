@@ -296,7 +296,7 @@ private fun CarouselCard(person: Person, today: LocalDate, modifier: Modifier) {
                 .padding(10.dp),
         ) {
             Text(
-                countdownLabel(days),
+                countdownLabel(LocalContext.current, days),
                 color = if (days <= 7) MaterialTheme.colorScheme.onPrimary else Color.White,
                 style = MaterialTheme.typography.labelLarge,
                 softWrap = false,
