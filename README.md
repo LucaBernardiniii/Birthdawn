@@ -10,9 +10,9 @@ A beautiful, lightweight, private birthday reminder for Android — with gift id
 
 <br/>
 
-[![Latest release](https://img.shields.io/github/v/release/LucaBernardinii/Birthdawn?style=for-the-badge&labelColor=0d1117&color=D2552F)](https://github.com/LucaBernardinii/Birthdawn/releases)
-[![Downloads](https://img.shields.io/github/downloads/LucaBernardinii/Birthdawn/total?style=for-the-badge&labelColor=0d1117&color=D2552F)](https://github.com/LucaBernardinii/Birthdawn/releases)
-[![Star on GitHub](https://img.shields.io/github/stars/LucaBernardinii/Birthdawn?style=for-the-badge&logo=github&logoColor=white&labelColor=0d1117&color=D2552F)](https://github.com/LucaBernardinii/Birthdawn/stargazers)
+[![Latest release](https://img.shields.io/github/v/release/LucaBernardiniii/Birthdawn?style=for-the-badge&labelColor=0d1117&color=D2552F)](https://github.com/LucaBernardinii/Birthdawn/releases)
+[![Downloads](https://img.shields.io/github/downloads/LucaBernardiniii/Birthdawn/total?style=for-the-badge&labelColor=0d1117&color=D2552F)](https://github.com/LucaBernardinii/Birthdawn/releases)
+[![Star on GitHub](https://img.shields.io/github/stars/LucaBernardiniii/Birthdawn?style=for-the-badge&logo=github&logoColor=white&labelColor=0d1117&color=D2552F)](https://github.com/LucaBernardinii/Birthdawn/stargazers)
 [![Android 8.0+](https://img.shields.io/badge/Android-8.0%2B-3DDC84?style=for-the-badge&logo=android&logoColor=white&labelColor=0d1117)](#download)
 
 <br/>
@@ -129,12 +129,12 @@ A beautiful, lightweight, private birthday reminder for Android — with gift id
   </tr>
   <tr>
     <td align="center">
-      <a href="https://github.com/LucaBernardinii/Birthdawn/releases/latest/download/Birthdawn.apk">
+      <a href="https://github.com/LucaBernardiniii/Birthdawn/releases/latest/download/Birthdawn.apk">
         <img src="https://img.shields.io/badge/Download-APK-D2552F?style=for-the-badge&logo=github&logoColor=white&labelColor=0d1117" alt="Download the latest Birthdawn APK from GitHub" height="48">
       </a>
     </td>
     <td align="center">
-      <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/LucaBernardinii/Birthdawn/">
+      <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/LucaBernardiniii/Birthdawn/">
         <img src="https://img.shields.io/badge/Add%20to-Obtainium-6750A4?style=for-the-badge&labelColor=0d1117" alt="Add Birthdawn to Obtainium for automatic updates" height="48">
       </a>
     </td>
@@ -249,7 +249,7 @@ This is my first android project and I hope it'll make your life a bit easier (a
 
 ### If I helped you, please consider leaving a ⭐
 
-[![Star on GitHub](https://img.shields.io/badge/%E2%AD%90%20Star%20this%20repo-D2552F?style=for-the-badge&labelColor=0d1117)](https://github.com/LucaBernardinii/Birthdawn/stargazers)
+[![Star on GitHub](https://img.shields.io/badge/%E2%AD%90%20Star%20this%20repo-D2552F?style=for-the-badge&labelColor=0d1117)](https://github.com/LucaBernardiniii/Birthdawn/stargazers)
 
 </div>
 
@@ -257,7 +257,7 @@ This is my first android project and I hope it'll make your life a bit easier (a
 
 <br/>
 
-**Made with ❤️ by [Luca](https://github.com/LucaBernardinii)**
+**Made with ❤️ by [Luca](https://github.com/LucaBernardiniii)**
 
 <sub>Birthdawn — because every birthday deserves a sunrise.</sub>
 
