@@ -1,6 +1,7 @@
 package dev.luca.birthdawn
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.content.pm.PackageManager
@@ -17,11 +18,17 @@ import dev.luca.birthdawn.data.PeopleRepository
 import dev.luca.birthdawn.notify.Notifier
 import dev.luca.birthdawn.notify.ReminderScheduler
 import dev.luca.birthdawn.ui.App
+import dev.luca.birthdawn.util.AppLanguage
 import dev.luca.birthdawn.ui.theme.AppearanceSettings
 import dev.luca.birthdawn.ui.theme.BirthdawnTheme
 import dev.luca.birthdawn.ui.theme.rememberDarkTheme
 
 class MainActivity : ComponentActivity() {
+
+    /** Applica la lingua scelta nelle impostazioni a tutta la schermata. */
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(AppLanguage.wrap(newBase))
+    }
 
     /** Persona da aprire quando si tocca una notifica. */
     private val personToOpen = mutableStateOf<String?>(null)

@@ -6,6 +6,12 @@
 
 package dev.luca.birthdawn.ui
 
+import dev.luca.birthdawn.util.AppLanguage
+import dev.luca.birthdawn.util.plural
+import dev.luca.birthdawn.util.turnsLabel
+import dev.luca.birthdawn.util.formatBirthday
+import dev.luca.birthdawn.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.background
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.spring
@@ -158,7 +164,7 @@ fun PersonDetailScreen(
                     photo = person.photoPath,
                     name = person.name,
                     onPick = null,
-                    subtitle = formatDayMonth(person.day, person.month) + (person.year?.let { " $it" } ?: ""),
+                    subtitle = formatBirthday(person.day, person.month, person.year),
                     focus = person.photoFocus,
                     height = BANNER_HEIGHT + with(density) { stretch.toDp() },
                 )
@@ -172,11 +178,11 @@ fun PersonDetailScreen(
                     InfoCard {
                         InfoRow(
                             Icons.Filled.DateRange,
-                            "Compleanno",
-                            formatDayMonth(person.day, person.month) + (person.year?.let { " $it" } ?: ""),
+                            stringResource(R.string.birthday),
+                            formatBirthday(person.day, person.month, person.year),
                         )
                         if (currentAge != null) {
-                            InfoRow(Icons.Filled.Star, "Età attuale", "$currentAge anni")
+                            InfoRow(Icons.Filled.Star, stringResource(R.string.current_age), plural(context, R.plurals.age_years, currentAge))
                         }
                     }
 
@@ -184,7 +190,7 @@ fun PersonDetailScreen(
 
                     if (person.notes.isNotBlank()) {
                         InfoCard {
-                            InfoRow(Icons.Filled.Info, "Note", person.notes)
+                            InfoRow(Icons.Filled.Info, stringResource(R.string.notes), person.notes)
                         }
                     }
 
@@ -196,10 +202,10 @@ fun PersonDetailScreen(
                             Icon(Icons.Filled.Notifications, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                             Spacer(Modifier.size(12.dp))
                             Column {
-                                Text("Notifiche", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(stringResource(R.string.notifications), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 Text(
-                                    if (person.reminderDays.isEmpty()) "Nessuna notifica attiva"
-                                    else "Alle ${Prefs.timeLabel(context)}",
+                                    if (person.reminderDays.isEmpty()) stringResource(R.string.no_active_reminders)
+                                    else stringResource(R.string.at_time, Prefs.timeLabel(context)),
                                     style = MaterialTheme.typography.bodyMedium,
                                 )
                             }
@@ -210,7 +216,7 @@ fun PersonDetailScreen(
                                 modifier = Modifier.padding(start = 52.dp, end = 16.dp, bottom = 8.dp),
                             ) {
                                 person.reminderDays.sortedDescending().forEach { d ->
-                                    SuggestionChip(onClick = onEdit, label = { Text(reminderLabel(d)) })
+                                    SuggestionChip(onClick = onEdit, label = { Text(reminderLabel(context, d)) })
                                 }
                             }
                         } else {
@@ -226,7 +232,7 @@ fun PersonDetailScreen(
                     ) {
                         Icon(Icons.Filled.Edit, contentDescription = null, modifier = Modifier.size(18.dp))
                         Spacer(Modifier.size(8.dp))
-                        Text("Modifica")
+                        Text(stringResource(R.string.edit))
                     }
                     Spacer(Modifier.navigationBarsPadding().height(16.dp))
                 }
@@ -241,14 +247,14 @@ fun PersonDetailScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 RoundIconButton(onClick = onBack) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Indietro", tint = Color.White)
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back), tint = Color.White)
                 }
                 Spacer(Modifier.weight(1f))
                 RoundIconButton(onClick = onEdit) {
-                    Icon(Icons.Filled.Edit, contentDescription = "Modifica", tint = Color.White)
+                    Icon(Icons.Filled.Edit, contentDescription = stringResource(R.string.edit), tint = Color.White)
                 }
                 RoundIconButton(onClick = { confirmDelete = true }) {
-                    Icon(Icons.Filled.Delete, contentDescription = "Elimina", tint = Color.White)
+                    Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.delete), tint = Color.White)
                 }
             }
         }
@@ -256,16 +262,16 @@ fun PersonDetailScreen(
         if (confirmDelete) {
             AlertDialog(
                 onDismissRequest = { confirmDelete = false },
-                title = { Text("Eliminare ${person.name}?") },
-                text = { Text("Il compleanno e la foto verranno rimossi dall'app.") },
+                title = { Text(stringResource(R.string.delete_person_title, person.name)) },
+                text = { Text(stringResource(R.string.delete_person_text)) },
                 confirmButton = {
                     TextButton(onClick = {
                         confirmDelete = false
                         PeopleRepository.delete(context, person.id)
                         onDeleted()
-                    }) { Text("Elimina", color = MaterialTheme.colorScheme.error) }
+                    }) { Text(stringResource(R.string.delete), color = MaterialTheme.colorScheme.error) }
                 },
-                dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text("Annulla") } },
+                dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text(stringResource(R.string.cancel)) } },
             )
         }
         } // CompositionLocalProvider
@@ -281,7 +287,7 @@ private fun CountdownCard(person: Person, days: Int, nextDate: LocalDate, turnin
     ) {
         Column(Modifier.padding(24.dp)) {
             if (days == 0) {
-                Text("🎂 Oggi!", fontSize = 40.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                Text(stringResource(R.string.today_cake), fontSize = 40.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
             } else {
                 Row(verticalAlignment = Alignment.Bottom) {
                     Text(
@@ -293,7 +299,7 @@ private fun CountdownCard(person: Person, days: Int, nextDate: LocalDate, turnin
                     )
                     Spacer(Modifier.size(8.dp))
                     Text(
-                        if (days == 1) "giorno" else "giorni",
+                        plural(LocalContext.current, R.plurals.days_word, days),
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         modifier = Modifier.padding(bottom = 8.dp),
@@ -302,14 +308,15 @@ private fun CountdownCard(person: Person, days: Int, nextDate: LocalDate, turnin
             }
             Text(
                 formatLongDate(nextDate) +
-                    (if (nextDate.year != LocalDate.now().year) " ${nextDate.year}" else "") +
-                    (turning?.let { " · compie $it anni" } ?: ""),
+                    (if (nextDate.year != LocalDate.now().year) (if (AppLanguage.isItalian) " " else ", ") + nextDate.year else "") +
+                    (turning?.let { " · " + turnsLabel(LocalContext.current, it) } ?: ""),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.85f),
             )
             if (days in 1..7) {
                 Text(
-                    countdownLabel(days) + "! " + if (person.gifts.any { !it.bought }) "Dai un'occhiata alle idee regalo 🎁" else "Hai pensato al regalo?",
+                    countdownLabel(LocalContext.current, days) + "! " +
+                        stringResource(if (person.gifts.any { !it.bought }) R.string.gift_hint_have else R.string.gift_hint_none),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold,

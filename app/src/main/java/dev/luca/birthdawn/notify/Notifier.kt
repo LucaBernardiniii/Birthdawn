@@ -16,7 +16,9 @@ import dev.luca.birthdawn.MainActivity
 import dev.luca.birthdawn.R
 import dev.luca.birthdawn.data.Person
 import dev.luca.birthdawn.util.ageOn
+import dev.luca.birthdawn.util.AppLanguage
 import dev.luca.birthdawn.util.formatDayMonth
+import dev.luca.birthdawn.util.turnsLabel
 import java.time.LocalDate
 
 object Notifier {
@@ -24,10 +26,11 @@ object Notifier {
     const val EXTRA_PERSON_ID = "person_id"
 
     fun ensureChannel(context: Context) {
+        val ctx = AppLanguage.wrap(context)
         val nm = context.getSystemService(NotificationManager::class.java)
         val channel = NotificationChannel(
-            CHANNEL_ID, "Promemoria compleanni", NotificationManager.IMPORTANCE_HIGH
-        ).apply { description = "Avvisi per i compleanni in arrivo" }
+            CHANNEL_ID, ctx.getString(R.string.channel_name), NotificationManager.IMPORTANCE_HIGH
+        ).apply { description = ctx.getString(R.string.channel_desc) }
         nm.createNotificationChannel(channel)
     }
 
@@ -40,38 +43,40 @@ object Notifier {
     }
 
     fun showBirthday(context: Context, person: Person, daysBefore: Int, date: LocalDate) {
+        val ctx = AppLanguage.wrap(context)
+        val res = ctx.resources
         val age = person.ageOn(date)
         val title = when (daysBefore) {
-            0 -> "🎂 Oggi è il compleanno di ${person.name}!"
-            1 -> "Domani è il compleanno di ${person.name}"
-            else -> "Tra $daysBefore giorni è il compleanno di ${person.name}"
+            0 -> ctx.getString(R.string.notif_today, person.name)
+            1 -> ctx.getString(R.string.notif_tomorrow, person.name)
+            else -> res.getQuantityString(R.plurals.notif_in_days, daysBefore, daysBefore, person.name)
         }
         val text = if (daysBefore == 0) {
-            (age?.let { "Compie $it anni. " } ?: "") + "Ricordati di fare gli auguri!"
+            (age?.let { res.getQuantityString(R.plurals.notif_turns, it, it) } ?: "") + ctx.getString(R.string.notif_remember)
         } else {
-            formatDayMonth(person.day, person.month) + (age?.let { " · compie $it anni" } ?: "")
+            formatDayMonth(person.day, person.month) + (age?.let { " · " + turnsLabel(ctx, it) } ?: "")
         }
         val ideas = person.gifts.count { !it.bought }
-        val giftLine = when {
-            daysBefore == 0 || ideas == 0 -> null
-            ideas == 1 -> "🎁 Hai 1 idea regalo salvata"
-            else -> "🎁 Hai $ideas idee regalo salvate"
-        }
+        val giftLine = if (daysBefore == 0 || ideas == 0) null
+        else res.getQuantityString(R.plurals.notif_gifts, ideas, ideas)
         val fullText = listOfNotNull(text, giftLine, person.notes.takeIf { it.isNotBlank() }).joinToString("\n")
         post(context, (person.id + daysBefore).hashCode(), title, text, fullText, person.id)
     }
 
     fun showOwnBirthday(context: Context, name: String, age: Int?) {
+        val ctx = AppLanguage.wrap(context)
         val who = name.trim().ifEmpty { null }
-        val title = "🎉 Buon compleanno" + (who?.let { ", $it" } ?: "") + "!"
-        val text = (age?.takeIf { it > 0 }?.let { "$it anni! " } ?: "") +
-            "Tanti auguri da Birthdawn, goditi la giornata 🎂"
+        val title = if (who != null) ctx.getString(R.string.notif_own_title_named, who)
+        else ctx.getString(R.string.notif_own_title)
+        val text = (age?.takeIf { it > 0 }?.let { ctx.resources.getQuantityString(R.plurals.notif_own_age, it, it) } ?: "") +
+            ctx.getString(R.string.notif_own_text)
         post(context, 7777, title, text, text, null)
     }
 
     fun showTest(context: Context): Boolean {
         if (!canNotify(context)) return false
-        post(context, 42, "🎂 Notifica di prova", "Le notifiche dei compleanni funzionano!", null, null)
+        val ctx = AppLanguage.wrap(context)
+        post(context, 42, ctx.getString(R.string.notif_test_title), ctx.getString(R.string.notif_test_text), null, null)
         return true
     }
 

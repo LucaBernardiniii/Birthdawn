@@ -1,5 +1,10 @@
 package dev.luca.birthdawn.ui
 
+import dev.luca.birthdawn.util.weekdayInitials
+import dev.luca.birthdawn.util.turnsLabel
+import dev.luca.birthdawn.R
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -55,7 +60,6 @@ import dev.luca.birthdawn.util.occursOn
 import java.time.LocalDate
 import java.time.YearMonth
 
-private val WEEKDAYS = listOf("L", "M", "M", "G", "V", "S", "D")
 
 @Composable
 fun CalendarScreen(
@@ -64,6 +68,8 @@ fun CalendarScreen(
     contentPadding: PaddingValues,
     onOpen: (Person) -> Unit,
 ) {
+    val context = LocalContext.current
+    val weekdays = remember { weekdayInitials() }
     // Mese visualizzato salvato come indice (anno*12 + mese-1) per sopravvivere alle rotazioni.
     var monthIndex by rememberSaveable { mutableIntStateOf(today.year * 12 + today.monthValue - 1) }
     var selectedStr by rememberSaveable { mutableStateOf(today.toString()) }
@@ -114,7 +120,7 @@ fun CalendarScreen(
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         IconButton(onClick = { monthIndex -= 1 }) {
-                            Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = "Mese precedente")
+                            Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = stringResource(R.string.prev_month))
                         }
                         Text(
                             "${monthName(ym.monthValue)} ${ym.year}",
@@ -124,12 +130,12 @@ fun CalendarScreen(
                             textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                         )
                         IconButton(onClick = { monthIndex += 1 }) {
-                            Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = "Mese successivo")
+                            Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = stringResource(R.string.next_month))
                         }
                     }
                     Spacer(Modifier.height(8.dp))
                     Row {
-                        WEEKDAYS.forEach {
+                        weekdays.forEach {
                             Text(
                                 it,
                                 modifier = Modifier.weight(1f),
@@ -169,19 +175,19 @@ fun CalendarScreen(
                                 selectedStr = today.toString()
                             },
                             modifier = Modifier.align(Alignment.End),
-                        ) { Text("Torna a oggi") }
+                        ) { Text(stringResource(R.string.back_to_today)) }
                     }
                 }
             }
         }
 
         item(key = "selected-header") {
-            SectionHeader(formatLongDate(selected) + if (selected == today) " · oggi" else "")
+            SectionHeader(formatLongDate(selected) + if (selected == today) stringResource(R.string.today_suffix) else "")
         }
         if (selectedPeople.isEmpty()) {
             item(key = "selected-empty") {
                 Text(
-                    "Nessun compleanno in questo giorno",
+                    stringResource(R.string.no_birthdays_day),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
                 )
@@ -191,19 +197,19 @@ fun CalendarScreen(
                 val age = person.ageOn(selected)
                 SimplePersonRow(
                     person,
-                    subtitle = (age?.let { "Compie $it anni" } ?: "Compleanno") +
-                        " · " + countdownLabel(person.daysUntil(today)).lowercase(),
+                    subtitle = (age?.let { turnsLabel(context, it, capitalized = true) } ?: stringResource(R.string.birthday)) +
+                        " · " + countdownLabel(context, person.daysUntil(today)).lowercase(),
                 ) { onOpen(person) }
             }
         }
 
         item(key = "month-header") {
-            SectionHeader("Tutti i compleanni di ${monthName(ym.monthValue).lowercase()}")
+            SectionHeader(stringResource(R.string.all_birthdays_in, monthName(ym.monthValue).lowercase()))
         }
         if (monthPeople.isEmpty()) {
             item(key = "month-empty") {
                 Text(
-                    "Nessun compleanno questo mese",
+                    stringResource(R.string.no_birthdays_month),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
                 )

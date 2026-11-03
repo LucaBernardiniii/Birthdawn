@@ -5,7 +5,21 @@
 
 package dev.luca.birthdawn.ui
 
+import dev.luca.birthdawn.util.findActivity
+import dev.luca.birthdawn.util.AppLanguage
+import dev.luca.birthdawn.util.formatBirthday
+import dev.luca.birthdawn.R
+import androidx.compose.ui.res.stringResource
 import android.widget.Toast
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.runtime.rememberCoroutineScope
+import dev.luca.birthdawn.data.Backup
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -96,15 +110,40 @@ fun SettingsScreen(onBack: () -> Unit) {
     var myBirthday by remember { mutableStateOf(Prefs.myBirthday(context)) }
     var showMyBirthday by remember { mutableStateOf(false) }
 
+    // ---- Backup ----
+    val scope = rememberCoroutineScope()
+    var busyMessage by remember { mutableStateOf<String?>(null) }
+    var pendingImport by remember { mutableStateOf<Uri?>(null) }
+    val exportLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/zip")
+    ) { uri ->
+        if (uri != null) scope.launch {
+            busyMessage = context.getString(R.string.exporting)
+            val result = runCatching { withContext(Dispatchers.IO) { Backup.exportTo(context, uri) } }
+            busyMessage = null
+            Toast.makeText(
+                context,
+                result.fold(
+                    onSuccess = { context.getString(R.string.backup_saved, context.getString(R.string.backup_summary, it.people, it.photos, it.gifts)) },
+                    onFailure = { context.getString(R.string.export_failed, it.message ?: "") },
+                ),
+                Toast.LENGTH_LONG,
+            ).show()
+        }
+    }
+    val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        if (uri != null) pendingImport = uri
+    }
+
     fun setMode(mode: AccentMode) = AppearanceSettings.update(context, appearance.copy(mode = mode))
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Impostazioni") },
+                title = { Text(stringResource(R.string.settings)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Indietro")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 },
             )
@@ -117,16 +156,51 @@ fun SettingsScreen(onBack: () -> Unit) {
                 .verticalScroll(rememberScrollState()),
         ) {
             // ---------- Notifiche ----------
-            SettingsSection("Il tuo compleanno")
+            // ---------- Lingua ----------
+            SettingsSection(stringResource(R.string.language))
+            SettingsCard {
+                val current = remember { AppLanguage.saved(context) }
+                val options = listOf(
+                    AppLanguage.SYSTEM to stringResource(R.string.lang_auto),
+                    AppLanguage.ITALIAN to "Italiano",
+                    AppLanguage.ENGLISH to "English",
+                )
+                SingleChoiceSegmentedButtonRow(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                ) {
+                    options.forEachIndexed { index, (code, label) ->
+                        SegmentedButton(
+                            selected = current == code,
+                            onClick = {
+                                if (code != current) {
+                                    AppLanguage.save(context, code)
+                                    // Ricrea la schermata per applicare subito la nuova lingua
+                                    context.findActivity()?.recreate()
+                                }
+                            },
+                            shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size),
+                        ) { Text(label, maxLines = 1) }
+                    }
+                }
+                Text(
+                    stringResource(R.string.lang_auto_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 14.dp),
+                )
+            }
+
+            SettingsSection(stringResource(R.string.your_birthday))
             SettingsCard {
                 ListItem(
                     headlineContent = {
-                        Text(myBirthday?.let { formatDayMonth(it.day, it.month) + (it.year?.let { y -> " $y" } ?: "") } ?: "Non impostato")
+                        Text(myBirthday?.let { formatBirthday(it.day, it.month, it.year) } ?: stringResource(R.string.not_set))
                     },
                     supportingContent = {
                         Text(
-                            if (myBirthday == null) "Inseriscilo e il giorno stesso Birthdawn ti farà gli auguri 🎉"
-                            else "Il giorno stesso riceverai una notifica di auguri"
+                            stringResource(if (myBirthday == null) R.string.your_birthday_hint_empty else R.string.your_birthday_hint_set)
                         )
                     },
                     leadingContent = { Text("🎂", style = MaterialTheme.typography.titleLarge) },
@@ -135,24 +209,24 @@ fun SettingsScreen(onBack: () -> Unit) {
                 )
             }
 
-            SettingsSection("Notifiche")
+            SettingsSection(stringResource(R.string.notifications))
             SettingsCard {
                 ListItem(
-                    headlineContent = { Text("Orario delle notifiche") },
-                    supportingContent = { Text("Ogni giorno alle $timeLabel") },
+                    headlineContent = { Text(stringResource(R.string.notification_time)) },
+                    supportingContent = { Text(stringResource(R.string.every_day_at, timeLabel)) },
                     leadingContent = { Icon(Icons.Filled.Notifications, contentDescription = null) },
                     colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                     modifier = Modifier.clickable { showTimePicker = true },
                 )
                 ListItem(
-                    headlineContent = { Text("Invia notifica di prova") },
+                    headlineContent = { Text(stringResource(R.string.send_test)) },
                     leadingContent = { Icon(Icons.AutoMirrored.Filled.Send, contentDescription = null) },
                     colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                     modifier = Modifier.clickable {
                         if (!Notifier.showTest(context)) {
                             Toast.makeText(
                                 context,
-                                "Notifiche disattivate: abilitale nelle impostazioni di Android",
+                                context.getString(R.string.notifications_disabled),
                                 Toast.LENGTH_LONG,
                             ).show()
                         }
@@ -161,12 +235,12 @@ fun SettingsScreen(onBack: () -> Unit) {
             }
 
             // ---------- Colore d'accento ----------
-            SettingsSection("Tema")
+            SettingsSection(stringResource(R.string.theme))
             SettingsCard {
                 val options = listOf(
-                    ThemeMode.LIGHT to "Chiaro",
-                    ThemeMode.DARK to "Scuro",
-                    ThemeMode.SYSTEM to "Dispositivo",
+                    ThemeMode.LIGHT to stringResource(R.string.theme_light),
+                    ThemeMode.DARK to stringResource(R.string.theme_dark),
+                    ThemeMode.SYSTEM to stringResource(R.string.theme_system),
                 )
                 SingleChoiceSegmentedButtonRow(
                     Modifier
@@ -183,14 +257,13 @@ fun SettingsScreen(onBack: () -> Unit) {
                 }
             }
 
-            SettingsSection("Barra di navigazione")
+            SettingsSection(stringResource(R.string.nav_bar))
             SettingsCard {
                 ListItem(
-                    headlineContent = { Text("Rimpicciolisci scorrendo") },
+                    headlineContent = { Text(stringResource(R.string.shrink_on_scroll)) },
                     supportingContent = {
                         Text(
-                            if (appearance.shrinkNavBar) "La barra in basso diventa compatta quando scorri verso il basso"
-                            else "La barra in basso resta sempre della stessa dimensione"
+                            stringResource(if (appearance.shrinkNavBar) R.string.shrink_on else R.string.shrink_off)
                         )
                     },
                     trailingContent = {
@@ -208,11 +281,11 @@ fun SettingsScreen(onBack: () -> Unit) {
                 )
             }
 
-            SettingsSection("Aspetto")
+            SettingsSection(stringResource(R.string.appearance))
             SettingsCard {
                 AccentOption(
-                    title = "Alba (predefinito)",
-                    subtitle = "Sfondo che sfuma dall'azzurro del cielo all'arancione del sole",
+                    title = stringResource(R.string.dawn_title),
+                    subtitle = stringResource(R.string.dawn_subtitle),
                     swatch = null,
                     swatchBrush = dawnBackdrop(LocalDarkTheme.current).brush,
                     selected = appearance.mode == AccentMode.DAWN,
@@ -223,17 +296,16 @@ fun SettingsScreen(onBack: () -> Unit) {
                     if (supportsDynamicColor) dynamicLightColorScheme(context).primary else null
                 }
                 AccentOption(
-                    title = "Sfondo del telefono",
-                    subtitle = if (supportsDynamicColor) "Usa i colori del tuo sfondo (Material You)"
-                    else "Richiede Android 12 o superiore",
+                    title = stringResource(R.string.wallpaper_title),
+                    subtitle = stringResource(if (supportsDynamicColor) R.string.wallpaper_sub else R.string.wallpaper_unsupported),
                     swatch = systemColor,
                     selected = appearance.mode == AccentMode.SYSTEM,
                     enabled = supportsDynamicColor,
                     onClick = { setMode(AccentMode.SYSTEM) },
                 )
                 AccentOption(
-                    title = "Personalizzato",
-                    subtitle = "Scegli tu il colore",
+                    title = stringResource(R.string.custom_title),
+                    subtitle = stringResource(R.string.custom_sub),
                     swatch = Color(appearance.customColor),
                     selected = appearance.mode == AccentMode.CUSTOM,
                     enabled = true,
@@ -272,12 +344,12 @@ fun SettingsScreen(onBack: () -> Unit) {
             }
 
             // ---------- Pagina persona ----------
-            SettingsSection("Pagina della persona")
+            SettingsSection(stringResource(R.string.person_page))
             SettingsCard {
                 ListItem(
-                    headlineContent = { Text("Colore dalla foto") },
+                    headlineContent = { Text(stringResource(R.string.photo_color)) },
                     supportingContent = {
-                        Text("Ogni persona con una foto avrà la pagina colorata con i toni della sua foto")
+                        Text(stringResource(R.string.photo_color_sub))
                     },
                     leadingContent = { Icon(Icons.Filled.Face, contentDescription = null) },
                     trailingContent = {
@@ -294,8 +366,89 @@ fun SettingsScreen(onBack: () -> Unit) {
                     },
                 )
             }
+            SettingsSection(stringResource(R.string.backup))
+            SettingsCard {
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.export_data)) },
+                    supportingContent = {
+                        Text(stringResource(R.string.export_data_sub))
+                    },
+                    leadingContent = { Text("📤", style = MaterialTheme.typography.titleLarge) },
+                    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                    modifier = Modifier.clickable { exportLauncher.launch(Backup.suggestedFileName()) },
+                )
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.import_data)) },
+                    supportingContent = { Text(stringResource(R.string.import_data_sub)) },
+                    leadingContent = { Text("📥", style = MaterialTheme.typography.titleLarge) },
+                    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                    modifier = Modifier.clickable {
+                        importLauncher.launch(arrayOf("application/zip", "application/x-zip-compressed", "application/octet-stream"))
+                    },
+                )
+            }
+            Text(
+                stringResource(R.string.backup_tip),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 28.dp, vertical = 8.dp),
+            )
+
             Spacer(Modifier.navigationBarsPadding().height(24.dp))
         }
+    }
+
+    pendingImport?.let { uri ->
+        AlertDialog(
+            onDismissRequest = { pendingImport = null },
+            title = { Text(stringResource(R.string.import_title)) },
+            text = {
+                Text(stringResource(R.string.import_text))
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    pendingImport = null
+                    scope.launch {
+                        busyMessage = context.getString(R.string.importing)
+                        val languageBefore = AppLanguage.saved(context)
+                        val result = runCatching { withContext(Dispatchers.IO) { Backup.importFrom(context, uri) } }
+                        busyMessage = null
+                        result.onSuccess {
+                            // Aggiorna i valori mostrati in questa schermata
+                            myBirthday = Prefs.myBirthday(context)
+                            timeLabel = Prefs.timeLabel(context)
+                        }
+                        Toast.makeText(
+                            context,
+                            result.fold(
+                                onSuccess = { context.getString(R.string.backup_restored, context.getString(R.string.backup_summary, it.people, it.photos, it.gifts)) },
+                                onFailure = { context.getString(R.string.import_failed, it.message ?: "") },
+                            ),
+                            Toast.LENGTH_LONG,
+                        ).show()
+                        // Se il backup aveva un'altra lingua, applicala subito
+                        if (result.isSuccess && AppLanguage.saved(context) != languageBefore) {
+                            context.findActivity()?.recreate()
+                        }
+                    }
+                }) { Text(stringResource(R.string.import_confirm)) }
+            },
+            dismissButton = { TextButton(onClick = { pendingImport = null }) { Text(stringResource(R.string.cancel)) } },
+        )
+    }
+
+    busyMessage?.let { message ->
+        AlertDialog(
+            onDismissRequest = { },
+            confirmButton = { },
+            text = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    CircularProgressIndicator(modifier = Modifier.size(28.dp))
+                    Spacer(Modifier.size(16.dp))
+                    Text(message)
+                }
+            },
+        )
     }
 
     if (showMyBirthday) {
@@ -318,7 +471,7 @@ fun SettingsScreen(onBack: () -> Unit) {
         )
         AlertDialog(
             onDismissRequest = { showTimePicker = false },
-            title = { Text("Orario delle notifiche") },
+            title = { Text(stringResource(R.string.notification_time)) },
             text = { TimePicker(state = state) },
             confirmButton = {
                 TextButton(onClick = {
@@ -327,9 +480,9 @@ fun SettingsScreen(onBack: () -> Unit) {
                     ReminderScheduler.runCheckIfDue(context)
                     timeLabel = Prefs.timeLabel(context)
                     showTimePicker = false
-                }) { Text("Salva") }
+                }) { Text(stringResource(R.string.save)) }
             },
-            dismissButton = { TextButton(onClick = { showTimePicker = false }) { Text("Annulla") } },
+            dismissButton = { TextButton(onClick = { showTimePicker = false }) { Text(stringResource(R.string.cancel)) } },
         )
     }
 }
@@ -419,13 +572,13 @@ private fun MyBirthdayDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Il tuo compleanno") },
+        title = { Text(stringResource(R.string.your_birthday)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = { Text("Il tuo nome (facoltativo)") },
+                    label = { Text(stringResource(R.string.your_name)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
                     modifier = Modifier.fillMaxWidth(),
@@ -437,10 +590,10 @@ private fun MyBirthdayDialog(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Column(Modifier.padding(16.dp)) {
-                        Text("Data", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(stringResource(R.string.date), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Text(
-                            if (month == 0) "Scegli la data"
-                            else formatDayMonth(day, month) + (year?.let { " $it" } ?: ""),
+                            if (month == 0) stringResource(R.string.choose_date)
+                            else formatBirthday(day, month, year),
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Medium,
                         )
@@ -452,14 +605,14 @@ private fun MyBirthdayDialog(
             TextButton(
                 enabled = month != 0,
                 onClick = { onSave(Prefs.MyBirthday(name.trim(), month, day, year)) },
-            ) { Text("Salva") }
+            ) { Text(stringResource(R.string.save)) }
         },
         dismissButton = {
             Row {
                 if (initial != null) {
-                    TextButton(onClick = { onSave(null) }) { Text("Rimuovi") }
+                    TextButton(onClick = { onSave(null) }) { Text(stringResource(R.string.remove)) }
                 }
-                TextButton(onClick = onDismiss) { Text("Annulla") }
+                TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
             }
         },
     )

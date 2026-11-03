@@ -73,6 +73,12 @@ object Photos {
 
     private val accentCache = HashMap<String, Int>()
 
+    /** Svuota le cache in memoria (dopo l'importazione di un backup). */
+    fun clearCache() {
+        cache.evictAll()
+        synchronized(accentCache) { accentCache.clear() }
+    }
+
     /** Colore d'accento estratto dalla foto (vivace se possibile, altrimenti dominante). */
     fun accentColor(context: Context, name: String): Int? {
         synchronized(accentCache) { accentCache[name]?.let { return it } }

@@ -2,6 +2,9 @@
 
 package dev.luca.birthdawn.ui
 
+import dev.luca.birthdawn.util.plural
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
@@ -231,7 +234,7 @@ private fun MainScreen(
                             Text("Birthdawn", fontWeight = FontWeight.Bold)
                             Text(
                                 formatLongDate(today) + " · " +
-                                    if (peopleCount == 1) "1 persona" else "$peopleCount persone",
+                                    plural(LocalContext.current, R.plurals.people_count, peopleCount),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -240,7 +243,7 @@ private fun MainScreen(
                 },
                 actions = {
                     IconButton(onClick = onSettings) {
-                        Icon(Icons.Filled.Settings, contentDescription = "Impostazioni")
+                        Icon(Icons.Filled.Settings, contentDescription = stringResource(R.string.settings))
                     }
                 },
                 scrollBehavior = scrollBehavior,
@@ -258,13 +261,13 @@ private fun MainScreen(
                     selected = tab == 0,
                     onClick = { onTab(0) },
                     icon = { Icon(Icons.Filled.Home, contentDescription = null) },
-                    label = { Text("Home") },
+                    label = { Text(stringResource(R.string.nav_home)) },
                 )
                 NavigationBarItem(
                     selected = tab == 1,
                     onClick = { onTab(1) },
                     icon = { Icon(Icons.Filled.DateRange, contentDescription = null) },
-                    label = { Text("Calendario") },
+                    label = { Text(stringResource(R.string.nav_calendar)) },
                 )
             }
         },
@@ -273,7 +276,7 @@ private fun MainScreen(
                 onClick = onAdd,
                 expanded = collapse < 0.5f,
                 icon = { Icon(Icons.Filled.Add, contentDescription = null) },
-                text = { Text("Aggiungi") },
+                text = { Text(stringResource(R.string.add)) },
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary,
             )
@@ -283,8 +286,8 @@ private fun MainScreen(
 }
 
 private val NAV_ITEMS = listOf(
-    Icons.Filled.Home to "Home",
-    Icons.Filled.DateRange to "Calendario",
+    Icons.Filled.Home to R.string.nav_home,
+    Icons.Filled.DateRange to R.string.nav_calendar,
 )
 
 /**
@@ -302,7 +305,8 @@ private fun ShrinkingNavBar(tab: Int, onTab: (Int) -> Unit, collapse: Float) {
                 .height(lerp(80.dp, 56.dp, collapse)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            NAV_ITEMS.forEachIndexed { index, (icon, label) ->
+            NAV_ITEMS.forEachIndexed { index, (icon, labelRes) ->
+                val label = stringResource(labelRes)
                 val selected = tab == index
                 Column(
                     Modifier

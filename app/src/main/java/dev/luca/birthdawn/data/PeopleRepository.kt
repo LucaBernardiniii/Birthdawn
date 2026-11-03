@@ -30,6 +30,14 @@ object PeopleRepository {
         return _people.value
     }
 
+    /** Rilegge i dati dal disco (dopo l'importazione di un backup). */
+    fun reload(context: Context) {
+        synchronized(this) {
+            _people.value = readFile(context.applicationContext)
+            loaded = true
+        }
+    }
+
     fun get(id: String): Person? = _people.value.firstOrNull { it.id == id }
 
     fun upsert(context: Context, person: Person) {

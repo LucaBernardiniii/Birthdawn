@@ -1,5 +1,8 @@
 package dev.luca.birthdawn.ui
 
+import dev.luca.birthdawn.util.plural
+import dev.luca.birthdawn.R
+import androidx.compose.ui.res.stringResource
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -72,7 +75,7 @@ fun openLink(context: Context, url: String) {
     try {
         context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     } catch (e: ActivityNotFoundException) {
-        Toast.makeText(context, "Nessuna app per aprire il link", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, context.getString(R.string.no_app_link), Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -97,21 +100,20 @@ fun GiftIdeasCard(person: Person) {
                 Text("🎁", style = MaterialTheme.typography.titleLarge)
                 Spacer(Modifier.size(12.dp))
                 Column(Modifier.weight(1f)) {
-                    Text("Idee regalo", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.gift_ideas), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                     val todo = person.gifts.count { !it.bought }
                     Text(
                         when {
-                            person.gifts.isEmpty() -> "Salva qui idee e link ad articoli"
-                            todo == 0 -> "Tutto preso!"
-                            todo == 1 -> "1 idea da prendere"
-                            else -> "$todo idee da prendere"
+                            person.gifts.isEmpty() -> stringResource(R.string.gifts_empty)
+                            todo == 0 -> stringResource(R.string.gifts_all_bought)
+                            else -> plural(context, R.plurals.gifts_todo, todo)
                         },
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
                 IconButton(onClick = { adding = true }) {
-                    Icon(Icons.Filled.Add, contentDescription = "Aggiungi idea regalo", tint = MaterialTheme.colorScheme.primary)
+                    Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.add_gift), tint = MaterialTheme.colorScheme.primary)
                 }
             }
 
@@ -130,7 +132,7 @@ fun GiftIdeasCard(person: Person) {
 
             if (person.gifts.isEmpty()) {
                 Text(
-                    "Suggerimento: da un'app di shopping o dal browser usa «Condividi» → Birthdawn per salvare un articolo al volo.",
+                    stringResource(R.string.gifts_share_tip),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(start = 52.dp, end = 16.dp, top = 4.dp, bottom = 8.dp),
@@ -191,7 +193,7 @@ private fun GiftRow(gift: GiftIdea, onToggle: () -> Unit, onClick: () -> Unit, o
         }
         if (gift.url != null) {
             IconButton(onClick = onOpen) {
-                Icon(Icons.Filled.ShoppingCart, contentDescription = "Apri link", tint = MaterialTheme.colorScheme.primary)
+                Icon(Icons.Filled.ShoppingCart, contentDescription = stringResource(R.string.open_link), tint = MaterialTheme.colorScheme.primary)
             }
         }
     }
@@ -215,14 +217,14 @@ fun GiftDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(if (initial == null) "Nuova idea regalo" else "Modifica idea regalo") },
+        title = { Text(stringResource(if (initial == null) R.string.new_gift else R.string.edit_gift)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
-                    label = { Text("Cosa regalare") },
-                    placeholder = { Text("es. Cuffie wireless") },
+                    label = { Text(stringResource(R.string.gift_what)) },
+                    placeholder = { Text(stringResource(R.string.gift_example)) },
                     keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
@@ -230,7 +232,7 @@ fun GiftDialog(
                 OutlinedTextField(
                     value = url,
                     onValueChange = { url = it },
-                    label = { Text("Link (facoltativo)") },
+                    label = { Text(stringResource(R.string.gift_link)) },
                     placeholder = { Text("https://…") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
                     singleLine = true,
@@ -239,7 +241,7 @@ fun GiftDialog(
                         if (url.isEmpty()) {
                             TextButton(onClick = {
                                 findUrl(clipboard.getText()?.text)?.let { url = it }
-                            }) { Text("Incolla") }
+                            }) { Text(stringResource(R.string.paste)) }
                         }
                     },
                 )
@@ -249,7 +251,7 @@ fun GiftDialog(
             TextButton(
                 enabled = finalTitle.isNotEmpty(),
                 onClick = { onSave(finalTitle, normalized) },
-            ) { Text("Salva") }
+            ) { Text(stringResource(R.string.save)) }
         },
         dismissButton = {
             Row {
@@ -257,10 +259,10 @@ fun GiftDialog(
                     TextButton(onClick = onDelete) {
                         Icon(Icons.Filled.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
                         Spacer(Modifier.size(4.dp))
-                        Text("Elimina")
+                        Text(stringResource(R.string.delete))
                     }
                 }
-                TextButton(onClick = onDismiss) { Text("Annulla") }
+                TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
             }
         },
     )
@@ -286,10 +288,10 @@ fun SharedGiftDialog(
     if (person == null) {
         AlertDialog(
             onDismissRequest = { onDone(null) },
-            title = { Text("Idea regalo per…") },
+            title = { Text(stringResource(R.string.gift_for)) },
             text = {
                 if (people.isEmpty()) {
-                    Text("Aggiungi prima una persona, poi potrai salvarle idee regalo.")
+                    Text(stringResource(R.string.gift_need_person))
                 } else {
                     LazyColumn(Modifier.heightIn(max = 380.dp)) {
                         items(people.sortedBy { it.name.lowercase() }, key = { it.id }) { p ->
@@ -308,7 +310,7 @@ fun SharedGiftDialog(
                     }
                 }
             },
-            confirmButton = { TextButton(onClick = { onDone(null) }) { Text("Annulla") } },
+            confirmButton = { TextButton(onClick = { onDone(null) }) { Text(stringResource(R.string.cancel)) } },
         )
     } else {
         GiftDialog(
@@ -320,7 +322,7 @@ fun SharedGiftDialog(
                 PeopleRepository.updateGifts(context, person.id) { list ->
                     list + GiftIdea(UUID.randomUUID().toString(), title, link)
                 }
-                Toast.makeText(context, "Idea salvata per ${person.name}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.gift_saved_for, person.name), Toast.LENGTH_SHORT).show()
                 onDone(person.id)
             },
         )

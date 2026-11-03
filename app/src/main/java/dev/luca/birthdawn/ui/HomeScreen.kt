@@ -2,6 +2,11 @@
 
 package dev.luca.birthdawn.ui
 
+import dev.luca.birthdawn.util.turnsLabel
+import dev.luca.birthdawn.util.plural
+import dev.luca.birthdawn.R
+import androidx.compose.ui.res.stringResource
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -70,10 +75,10 @@ import java.time.YearMonth
 private const val CAROUSEL_SIZE = 10
 
 /** Ordinamento della lista di persone in Home. */
-private enum class HomeSort(val label: String) {
-    UPCOMING("In arrivo"),
-    ALPHABETICAL("A–Z"),
-    CALENDAR("Gen → Dic"),
+private enum class HomeSort(@StringRes val label: Int) {
+    UPCOMING(R.string.sort_upcoming),
+    ALPHABETICAL(R.string.sort_az),
+    CALENDAR(R.string.sort_calendar),
 }
 
 @Composable
@@ -146,7 +151,7 @@ fun HomeScreen(
         }
 
         if (carousel.isNotEmpty()) {
-            item(key = "carousel-h") { SectionHeader("In arrivo", Modifier.padding(top = 0.dp)) }
+            item(key = "carousel-h") { SectionHeader(stringResource(R.string.section_upcoming), Modifier.padding(top = 0.dp)) }
             item(key = "carousel") { UpcomingCarousel(carousel, today, onOpen) }
         }
 
@@ -154,12 +159,12 @@ fun HomeScreen(
             OutlinedTextField(
                 value = query,
                 onValueChange = { query = it },
-                placeholder = { Text("Cerca una persona") },
+                placeholder = { Text(stringResource(R.string.search_hint)) },
                 leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
                 trailingIcon = {
                     if (query.isNotEmpty()) {
                         IconButton(onClick = { query = "" }) {
-                            Icon(Icons.Filled.Close, contentDescription = "Cancella")
+                            Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.clear))
                         }
                     }
                 },
@@ -181,7 +186,7 @@ fun HomeScreen(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    "Ordina:",
+                    stringResource(R.string.sort_label),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -193,7 +198,7 @@ fun HomeScreen(
                             sort = option
                             Prefs.setHomeSort(context, option.name)
                         },
-                        label = { Text(option.label) },
+                        label = { Text(stringResource(option.label)) },
                         leadingIcon = if (selected) {
                             {
                                 Icon(
@@ -211,7 +216,7 @@ fun HomeScreen(
         if (filtered.isEmpty()) {
             item(key = "noresults") {
                 Text(
-                    "Nessun risultato per \"$query\"",
+                    stringResource(R.string.no_results, query),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(32.dp),
@@ -317,7 +322,7 @@ private fun CarouselCard(person: Person, today: LocalDate, modifier: Modifier) {
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                formatDayMonth(person.day, person.month) + (age?.let { " · $it anni" } ?: ""),
+                formatDayMonth(person.day, person.month) + (age?.let { " · " + plural(LocalContext.current, R.plurals.age_years, it) } ?: ""),
                 color = Color.White.copy(alpha = 0.85f),
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 1,
@@ -346,7 +351,7 @@ private fun TodayCard(list: List<Person>, today: LocalDate, onOpen: (Person) -> 
             .padding(20.dp),
     ) {
         Text(
-            "🎉 Oggi si festeggia",
+            stringResource(R.string.today_celebrating),
             color = Color.White,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
@@ -370,7 +375,8 @@ private fun TodayCard(list: List<Person>, today: LocalDate, onOpen: (Person) -> 
                     Column {
                         Text(person.name, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
                         Text(
-                            person.ageOn(today)?.let { "Compie $it anni" } ?: "Fai gli auguri!",
+                            person.ageOn(today)?.let { turnsLabel(LocalContext.current, it, capitalized = true) }
+                                ?: stringResource(R.string.say_happy_birthday),
                             color = Color.White.copy(alpha = 0.9f),
                             style = MaterialTheme.typography.bodyMedium,
                         )
@@ -399,14 +405,16 @@ private fun OwnBirthdayCard(name: String, age: Int?) {
         Text("🥳🎂🎉", fontSize = 40.sp)
         Spacer(Modifier.height(8.dp))
         Text(
-            "Buon compleanno" + (name.takeIf { it.isNotEmpty() }?.let { ", $it" } ?: "") + "!",
+            if (name.isNotEmpty()) stringResource(R.string.own_birthday_title_named, name)
+            else stringResource(R.string.own_birthday_title),
             color = Color.White,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
         )
         Text(
-            (age?.takeIf { it > 0 }?.let { "Oggi compi $it anni. " } ?: "") + "Tanti auguri da Birthdawn!",
+            (age?.takeIf { it > 0 }?.let { plural(LocalContext.current, R.plurals.own_birthday_age, it) } ?: "") +
+                stringResource(R.string.own_birthday_wishes),
             color = Color.White.copy(alpha = 0.9f),
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
@@ -430,13 +438,13 @@ private fun EmptyState() {
         ) { Text("🎂", fontSize = 56.sp) }
         Spacer(Modifier.height(24.dp))
         Text(
-            "Ancora nessun compleanno",
+            stringResource(R.string.empty_title),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold,
         )
         Spacer(Modifier.height(8.dp))
         Text(
-            "Tocca \"Aggiungi\" per salvare la prima persona. Ti avviserò 7 giorni prima e il giorno stesso.",
+            stringResource(R.string.empty_text),
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )

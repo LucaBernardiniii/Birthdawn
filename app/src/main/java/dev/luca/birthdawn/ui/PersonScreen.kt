@@ -5,6 +5,10 @@
 
 package dev.luca.birthdawn.ui
 
+import dev.luca.birthdawn.util.turnsLabel
+import dev.luca.birthdawn.util.formatBirthday
+import dev.luca.birthdawn.R
+import androidx.compose.ui.res.stringResource
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -198,18 +202,18 @@ fun PersonScreen(
                         Modifier.align(Alignment.End),
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
                     ) {
-                        TextButton(onClick = { showAdjust = true }) { Text("Regola posizione") }
+                        TextButton(onClick = { showAdjust = true }) { Text(stringResource(R.string.adjust_position)) }
                         TextButton(onClick = {
                             photo = null
                             setFocus(PhotoFocus())
-                        }) { Text("Rimuovi foto") }
+                        }) { Text(stringResource(R.string.remove_photo)) }
                     }
                 }
 
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = { Text("Nome") },
+                    label = { Text(stringResource(R.string.name)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
                     modifier = Modifier.fillMaxWidth(),
@@ -231,29 +235,29 @@ fun PersonScreen(
                         Icon(Icons.Filled.DateRange, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                         Column(Modifier.weight(1f)) {
                             Text(
-                                "Data di compleanno",
+                                stringResource(R.string.birthday_date),
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                             if (month == 0) {
-                                Text("Scegli la data", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
+                                Text(stringResource(R.string.choose_date), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
                             } else {
                                 Text(
-                                    formatDayMonth(day, month) + (year?.let { " $it" } ?: ""),
+                                    formatBirthday(day, month, year),
                                     style = MaterialTheme.typography.bodyLarge,
                                     fontWeight = FontWeight.Medium,
                                 )
                                 val preview = Person(id, name, month, day, year)
                                 val age = preview.ageOn(preview.nextBirthday(today))
                                 Text(
-                                    countdownLabel(preview.daysUntil(today)) +
-                                        (age?.let { " · compie $it anni" } ?: ""),
+                                    countdownLabel(context, preview.daysUntil(today)) +
+                                        (age?.let { " · " + turnsLabel(context, it) } ?: ""),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.primary,
                                 )
                             }
                         }
-                        Icon(Icons.Filled.Edit, contentDescription = "Modifica data", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Icon(Icons.Filled.Edit, contentDescription = stringResource(R.string.edit_date), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
                 Spacer(Modifier.height(12.dp))
@@ -261,7 +265,7 @@ fun PersonScreen(
                 OutlinedTextField(
                     value = notes,
                     onValueChange = { notes = it },
-                    label = { Text("Note (idee regalo, ecc.)") },
+                    label = { Text(stringResource(R.string.notes_hint)) },
                     minLines = 2,
                     keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
                     modifier = Modifier.fillMaxWidth(),
@@ -273,11 +277,11 @@ fun PersonScreen(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.Filled.Notifications, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                     Spacer(Modifier.size(8.dp))
-                    Text("Notifiche", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.notifications), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                 }
                 Text(
-                    if (reminders.isEmpty()) "Nessuna notifica per questa persona."
-                    else "Riceverai un avviso alle ${Prefs.timeLabel(context)} nei giorni scelti.",
+                    if (reminders.isEmpty()) stringResource(R.string.no_reminders_person)
+                    else stringResource(R.string.reminders_info, Prefs.timeLabel(context)),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
@@ -293,24 +297,24 @@ fun PersonScreen(
                         FilterChip(
                             selected = selected,
                             onClick = { setReminders(if (selected) reminders - d else reminders + d) },
-                            label = { Text(reminderLabel(d)) },
+                            label = { Text(reminderLabel(context, d)) },
                             leadingIcon = if (selected) {
                                 { Icon(Icons.Filled.Check, contentDescription = null, modifier = Modifier.size(FilterChipDefaults.IconSize)) }
                             } else null,
                             trailingIcon = if (isCustom) {
-                                { Icon(Icons.Filled.Close, contentDescription = "Rimuovi", modifier = Modifier.size(FilterChipDefaults.IconSize)) }
+                                { Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.remove), modifier = Modifier.size(FilterChipDefaults.IconSize)) }
                             } else null,
                         )
                     }
                     AssistChip(
                         onClick = { showCustomReminder = true },
-                        label = { Text("Personalizzata") },
+                        label = { Text(stringResource(R.string.custom)) },
                         leadingIcon = { Icon(Icons.Filled.Add, contentDescription = null, modifier = Modifier.size(18.dp)) },
                     )
                 }
                 if (reminders.toSet() != Person.DEFAULT_REMINDERS.toSet()) {
                     TextButton(onClick = { setReminders(Person.DEFAULT_REMINDERS.toSet()) }) {
-                        Text("Ripristina predefinite (7 giorni prima + il giorno stesso)")
+                        Text(stringResource(R.string.restore_default_reminders))
                     }
                 }
 
@@ -337,10 +341,10 @@ fun PersonScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(52.dp),
-                ) { Text(if (existing == null) "Aggiungi persona" else "Salva modifiche") }
+                ) { Text(stringResource(if (existing == null) R.string.add_person else R.string.save_changes)) }
                 if (!canSave) {
                     Text(
-                        "Inserisci nome e data per salvare",
+                        stringResource(R.string.fill_name_date),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier
@@ -361,12 +365,12 @@ fun PersonScreen(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             RoundIconButton(onClick = { close(saved = false) }) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Indietro", tint = Color.White)
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back), tint = Color.White)
             }
             Spacer(Modifier.weight(1f))
             if (existing != null) {
                 RoundIconButton(onClick = { confirmDelete = true }) {
-                    Icon(Icons.Filled.Delete, contentDescription = "Elimina", tint = Color.White)
+                    Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.delete), tint = Color.White)
                 }
             }
         }
@@ -415,17 +419,17 @@ fun PersonScreen(
     if (confirmDelete && existing != null) {
         AlertDialog(
             onDismissRequest = { confirmDelete = false },
-            title = { Text("Eliminare ${existing.name}?") },
-            text = { Text("Il compleanno e la foto verranno rimossi dall'app.") },
+            title = { Text(stringResource(R.string.delete_person_title, existing.name)) },
+            text = { Text(stringResource(R.string.delete_person_text)) },
             confirmButton = {
                 TextButton(onClick = {
                     confirmDelete = false
                     importedPhotos.forEach { Photos.delete(context, it) }
                     PeopleRepository.delete(context, existing.id)
                     onDeleted()
-                }) { Text("Elimina", color = MaterialTheme.colorScheme.error) }
+                }) { Text(stringResource(R.string.delete), color = MaterialTheme.colorScheme.error) }
             },
-            dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text("Annulla") } },
+            dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text(stringResource(R.string.cancel)) } },
         )
     }
     } // PhotoAccentTheme
@@ -528,7 +532,7 @@ fun PhotoBanner(
                     Icon(Icons.Filled.Face, contentDescription = null, tint = Color.White, modifier = Modifier.size(40.dp))
                 }
                 Spacer(Modifier.height(10.dp))
-                Text("Tocca per aggiungere una foto", color = Color.White, fontWeight = FontWeight.Medium)
+                Text(stringResource(R.string.tap_add_photo), color = Color.White, fontWeight = FontWeight.Medium)
             }
         }
         // Velo scuro in basso per leggere il nome
@@ -548,7 +552,7 @@ fun PhotoBanner(
         ) {
             Column(Modifier.weight(1f)) {
                 Text(
-                    name.ifBlank { "Nuova persona" },
+                    name.ifBlank { stringResource(R.string.new_person) },
                     color = Color.White,
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold,
@@ -562,7 +566,7 @@ fun PhotoBanner(
             if (bitmap != null && onPick != null) {
                 Surface(shape = RoundedCornerShape(50), color = Color.White.copy(alpha = 0.25f)) {
                     Text(
-                        "Cambia foto",
+                        stringResource(R.string.change_photo),
                         color = Color.White,
                         style = MaterialTheme.typography.labelLarge,
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
@@ -615,9 +619,9 @@ fun BirthdayDatePicker(
                         onConfirm(date.monthValue, date.dayOfMonth, if (yearUnknown) null else date.year)
                     }
                 },
-            ) { Text("OK") }
+            ) { Text(stringResource(R.string.ok)) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Annulla") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
     ) {
         DatePicker(
             state = state,
@@ -625,7 +629,7 @@ fun BirthdayDatePicker(
             // La casella sta nell'intestazione, così non si sovrappone al resto del calendario
             title = {
                 Column(Modifier.padding(start = 24.dp, end = 12.dp, top = 16.dp)) {
-                    Text("Seleziona la data di nascita", style = MaterialTheme.typography.labelLarge)
+                    Text(stringResource(R.string.select_birth_date), style = MaterialTheme.typography.labelLarge)
                     Row(
                         Modifier
                             .offset(x = (-12).dp)
@@ -635,7 +639,7 @@ fun BirthdayDatePicker(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Checkbox(checked = yearUnknown, onCheckedChange = { yearUnknown = it })
-                        Text("Non conosco l'anno", style = MaterialTheme.typography.bodyMedium)
+                        Text(stringResource(R.string.unknown_year), style = MaterialTheme.typography.bodyMedium)
                     }
                 }
             },
@@ -650,25 +654,25 @@ private fun CustomReminderDialog(onDismiss: () -> Unit, onConfirm: (Int) -> Unit
     val valid = value != null && value in 0..365
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Notifica personalizzata") },
+        title = { Text(stringResource(R.string.custom_reminder_title)) },
         text = {
             Column {
-                Text("Quanti giorni prima del compleanno vuoi essere avvisato?")
+                Text(stringResource(R.string.custom_reminder_question))
                 Spacer(Modifier.height(12.dp))
                 OutlinedTextField(
                     value = text,
                     onValueChange = { new -> text = new.filter { it.isDigit() }.take(3) },
-                    label = { Text("Giorni prima") },
+                    label = { Text(stringResource(R.string.days_before_label)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     isError = text.isNotEmpty() && !valid,
-                    supportingText = { Text("Da 0 (il giorno stesso) a 365") },
+                    supportingText = { Text(stringResource(R.string.days_before_range)) },
                 )
             }
         },
         confirmButton = {
-            TextButton(enabled = valid, onClick = { value?.let(onConfirm) }) { Text("Aggiungi") }
+            TextButton(enabled = valid, onClick = { value?.let(onConfirm) }) { Text(stringResource(R.string.add)) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Annulla") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
     )
 }

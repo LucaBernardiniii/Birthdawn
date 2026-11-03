@@ -4,6 +4,8 @@ App Android per ricordarsi dei compleanni. Kotlin + Jetpack Compose (Material 3)
 
 ## Funzioni
 
+- **Lingue**: italiano e inglese (Impostazioni → Lingua; *Automatica* segue la lingua del telefono). Tutti i testi, le date e le notifiche sono tradotti: i testi sono in `res/values/strings.xml` (inglese) e `res/values-it/strings.xml` (italiano).
+
 - **Home**: carosello Material 3 con i prossimi compleanni (foto a tutta card), poi l'elenco completo per mese con ricerca, ordinamento (in arrivo, A–Z, da gennaio a dicembre) e card speciale per chi festeggia oggi.
 - **Barra in alto**: nome dell'app, data di oggi, numero di persone e pulsante impostazioni.
 - **Persona**: pagina di visualizzazione con banner elastico (tirando giù si allunga e mostra la foto intera), foto, conto alla rovescia, età, note, notifiche) con pulsante Modifica; in modifica, banner per aggiungere/cambiare foto e scegliere la parte visibile (trascina e pizzica), nome, data (anche senza anno), note e notifiche personalizzate.
@@ -61,3 +63,13 @@ Requisiti: Android 8.0 (API 26) o superiore.
 ## Icona
 
 Icona adattiva vettoriale (`res/drawable/ic_launcher_*.xml`): sole che sorge con una candelina, su un gradiente notte → alba. Include la versione monocromatica per le icone a tema (Android 13+). In `store/` ci sono le versioni PNG 512×512 (Play Store) e 1024×1024, più l'SVG sorgente.
+
+## Backup
+
+Impostazioni → **Backup** → *Esporta dati* crea un file `.zip` con:
+
+- `manifest.json` – formato e versione del backup
+- `files/` – tutti i file dell'app (`people.json` con persone e idee regalo, `photos/` con le foto)
+- `prefs/` – tutte le impostazioni (il tuo compleanno, aspetto, orario notifiche, ordinamento…) con il loro tipo
+
+*Importa dati* sostituisce tutti i dati con quelli del backup, dopo una conferma. Il backup include automaticamente qualunque file o impostazione aggiunti in futuro.

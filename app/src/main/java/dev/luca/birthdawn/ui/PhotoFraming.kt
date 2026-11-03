@@ -1,5 +1,7 @@
 package dev.luca.birthdawn.ui
 
+import dev.luca.birthdawn.R
+import androidx.compose.ui.res.stringResource
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.material.icons.Icons
@@ -143,10 +145,10 @@ fun PhotoAdjustScreen(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             IconButton(onClick = onDismiss) {
-                Icon(Icons.Filled.Close, contentDescription = "Annulla")
+                Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.cancel))
             }
             Text(
-                "Regola la foto",
+                stringResource(R.string.adjust_photo),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.weight(1f),
@@ -157,12 +159,12 @@ fun PhotoAdjustScreen(
             ) {
                 Icon(Icons.Filled.Check, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.size(6.dp))
-                Text("Fatto")
+                Text(stringResource(R.string.done))
             }
         }
 
         Text(
-            "Trascina per spostare, pizzica con due dita per ingrandire",
+            stringResource(R.string.adjust_hint),
             color = colors.onSurfaceVariant,
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(horizontal = 20.dp),
@@ -218,7 +220,7 @@ fun PhotoAdjustScreen(
             }
             Spacer(Modifier.size(12.dp))
             Text(
-                "Così apparirà anche nelle liste",
+                stringResource(R.string.adjust_avatar_hint),
                 color = colors.onSurfaceVariant,
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.weight(1f),
@@ -237,11 +239,11 @@ fun PhotoAdjustScreen(
             OutlinedButton(
                 onClick = { focus = PhotoFocus() },
                 modifier = Modifier.weight(1f),
-            ) { Text("Ripristina") }
+            ) { Text(stringResource(R.string.reset)) }
             Button(
                 onClick = { onConfirm(focus) },
                 modifier = Modifier.weight(1f),
-            ) { Text("Conferma") }
+            ) { Text(stringResource(R.string.confirm)) }
         }
     }
 }

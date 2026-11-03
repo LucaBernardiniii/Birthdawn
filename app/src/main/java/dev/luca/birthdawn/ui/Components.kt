@@ -2,6 +2,10 @@
 
 package dev.luca.birthdawn.ui
 
+import dev.luca.birthdawn.util.turnsLabel
+import dev.luca.birthdawn.util.plural
+import dev.luca.birthdawn.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -121,7 +125,7 @@ fun BirthdayRow(person: Person, today: LocalDate, onClick: () -> Unit) {
                 )
                 Text(
                     formatDayMonth(person.day, person.month) +
-                        (age?.let { " · compie $it anni" } ?: ""),
+                        (age?.let { " · " + turnsLabel(LocalContext.current, it) } ?: ""),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -145,10 +149,10 @@ fun DaysBadge(days: Int, highlight: Boolean) {
     ) {
         when (days) {
             0 -> Text("🎂", fontSize = 20.sp)
-            1 -> Text("Domani", color = fg, style = MaterialTheme.typography.labelLarge)
+            1 -> Text(stringResource(R.string.tomorrow), color = fg, style = MaterialTheme.typography.labelLarge)
             else -> {
                 Text("$days", color = fg, fontWeight = FontWeight.Bold, fontSize = 18.sp, lineHeight = 20.sp)
-                Text("giorni", color = fg, style = MaterialTheme.typography.labelSmall)
+                Text(plural(LocalContext.current, R.plurals.days_word, days), color = fg, style = MaterialTheme.typography.labelSmall)
             }
         }
     }
