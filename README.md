@@ -128,6 +128,7 @@ A beautiful, lightweight, private birthday reminder for Android — with gift id
   <tr>
     <th align="center">GitHub</th>
     <th align="center">Obtainium</th>
+    <th align="center">Orion Store</th>
   </tr>
   <tr>
     <td align="center">
@@ -138,6 +139,11 @@ A beautiful, lightweight, private birthday reminder for Android — with gift id
     <td align="center">
       <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/LucaBernardiniii/Birthdawn/">
         <img src="https://img.shields.io/badge/Add%20to-Obtainium-6750A4?style=for-the-badge&labelColor=0d1117" alt="Add Birthdawn to Obtainium for automatic updates" height="48">
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://rookieenough.github.io/Orion-Data/app/?id=birthdawn">
+        <img src="https://raw.githubusercontent.com/RookieEnough/Orion-Store/refs/heads/main/assets/orion-badge.png" alt="Get it on Orion Store" height="60">
       </a>
     </td>
   </tr>
