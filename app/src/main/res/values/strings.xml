@@ -229,7 +229,7 @@
     <!-- Rubrica e batteria -->
     <string name="contacts">Contacts</string>
     <string name="import_contacts">Import from contacts</string>
-    <string name="import_contacts_sub">Add the birthdays saved in your phone's contacts</string>
+    <string name="import_contacts_sub">Add the birthdays saved in your phone\'s contacts</string>
     <string name="contacts_welcome_title">Import birthdays from your contacts?</string>
     <string name="contacts_welcome_text">Birthdawn can read the birthdays already saved in your contacts, so you don\'t have to add everyone by hand. Nothing leaves your phone. You can also do this later from Settings.</string>
     <string name="contacts_allow">Import</string>
