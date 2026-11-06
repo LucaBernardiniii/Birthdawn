@@ -335,6 +335,7 @@ fun PersonScreen(
                             // Le idee regalo si gestiscono dalla pagina della persona: vanno mantenute
                             gifts = PeopleRepository.get(id)?.gifts ?: emptyList(),
                             photoFocus = if (photo != null) focus else PhotoFocus(),
+                            contactKey = PeopleRepository.get(id)?.contactKey,
                         )
                         PeopleRepository.upsert(context, person)
                         close(saved = true)

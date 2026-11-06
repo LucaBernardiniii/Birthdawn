@@ -23,7 +23,7 @@ A beautiful, lightweight, private birthday reminder for Android — with gift id
 
 <br/>
 
-[**Download**](#download) · [**Features**](#features) · [**Privacy**](#privacy) · [**Translate**](#translations) · [**FAQ**](#faq) · [**Build**](#build-from-source)
+[**Download**](#download) · [**Features**](#features) · [**Privacy**](#privacy) · [**Translate**](#translations) · [**FAQ**](#faq)
 
 </div>
 
@@ -69,6 +69,7 @@ A beautiful, lightweight, private birthday reminder for Android — with gift id
 - Per-person custom reminders (1 day, 2 weeks, 1 month… or any number of days)
 - Choose the time of day you get notified
 - Reminders survive reboots and phone-off mornings
+- Guided **Reliable reminders** screen for phones that stop background apps
 - A birthday wish **for you** on your own birthday 🎉
 
 </td>
@@ -86,6 +87,7 @@ A beautiful, lightweight, private birthday reminder for Android — with gift id
     <td width="50%" valign="top">
 
 #### 🖼️ People & photos
+- **Import from contacts**: bring in the birthdays (and photos) already saved on your phone, without duplicates
 - Photo banner on every person, with drag & pinch framing
 - Notes, birth year optional (Feb 29 handled too)
 - Each page can take its colours from the person's photo
@@ -145,9 +147,9 @@ A beautiful, lightweight, private birthday reminder for Android — with gift id
 
 </div>
 
-**Installing:** download `Birthdawn.apk`, open it and allow installs from your browser or file manager when Android asks. On first launch, allow notifications so Birthdawn can remind you.
+**Installing:** download `Birthdawn.apk`, open it and allow installs from your browser or file manager when Android asks. On first launch, allow notifications so Birthdawn can remind you. Birthdawn then offers to import birthdays from your contacts and guides you through removing battery restrictions. Both steps are optional.
 
-**Updating:** install the new APK over the old one — your data stays. With [Obtainium](https://github.com/ImranR98/Obtainium) you'll get updates automatically.
+**Updating:** install the new APK over the old one — your data stays. *Coming from 1.x?* See the [FAQ](#faq). With [Obtainium](https://github.com/ImranR98/Obtainium) you'll get updates automatically.
 
 **Note:** Android might flag the app. The code is open source and can be scanned anytime.
 
@@ -161,12 +163,14 @@ A beautiful, lightweight, private birthday reminder for Android — with gift id
 
 </div>
 
-Everything — people, photos, gift ideas, settings — is stored only on your phone. There is no account, no cloud sync, no analytics and no ads. The app only asks for two permissions:
+Everything — people, photos, gift ideas, settings — is stored only on your phone. There is no account, no cloud sync, no analytics and no ads. The app only asks for these permissions:
 
 | Permission | Why |
 |---|---|
 | `POST_NOTIFICATIONS` | To remind you of upcoming birthdays |
 | `RECEIVE_BOOT_COMPLETED` | To keep reminders scheduled after you restart your phone |
+| `READ_CONTACTS` *(optional)* | Only if you choose to import birthdays from your contacts. Contacts are read on your phone and never sent anywhere |
+| `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` | To show Android's "allow background activity" dialog, so reminders arrive on time |
 
 Gift links open in your own browser or shopping app, outside Birthdawn.
 Want your data on another phone? Use **Settings → Backup → Export data** and import the file on the new device.
@@ -200,15 +204,21 @@ Choose the language in **Settings → Language**, or leave it on *Automatic* to 
 <details>
 <summary><b>I didn't get a notification. What should I check?</b></summary>
 
-- Open **Settings → Send a test notification**. If nothing appears, notifications are disabled for Birthdawn in Android's settings.
-- Some phones (Xiaomi, Huawei, Samsung…) aggressively stop background apps: set Birthdawn's battery usage to *Unrestricted*.
+- Open **Settings → Notifications → Reliable reminders**. It checks notifications and battery restrictions and guides you step by step, with extra tips for Xiaomi, Samsung, Huawei, OnePlus, Oppo, Realme and Vivo.
+- Tap **Send a test notification**. If nothing appears, notifications are disabled for Birthdawn in Android's settings.
 - If your phone was off at notification time, the reminder arrives as soon as you turn it on or open the app.
 </details>
 
 <details>
 <summary><b>An update won't install over my current version.</b></summary>
 
-Android only installs updates signed with the same key as the installed app. If you installed an early test build, uninstall it once (export a backup first!) and install the latest release — future updates will install normally.
+Since version 2.0 Birthdawn has a new app ID (`dev.luca.birthdawn`), so it installs as a separate app next to 1.x builds. To move your data: in the old app go to **Settings → Backup → Export data**, install the new version, import the file, then uninstall the old app. Future updates will install normally.
+</details>
+
+<details>
+<summary><b>How does the contacts import work?</b></summary>
+
+Go to **Settings → Contacts → Import from contacts** (Birthdawn also offers it on first launch). You'll see every contact with a birthday: pick who to add and whether to bring their photos too. People already in Birthdawn are greyed out, so you can run the import again whenever you add new birthdays to your contacts. If a contact has no birth year, the age simply isn't shown.
 </details>
 
 <details>
@@ -241,6 +251,7 @@ Yes. On Android 13+ enable *Themed icons* in your launcher and Birthdawn's monoc
 ---
 
 <div align="center">
+
 If you've read all the way down here, first of all, thank you.
 
 This is my first android project and I hope it'll make your life a bit easier (at least when it comes to reminding birthdays).

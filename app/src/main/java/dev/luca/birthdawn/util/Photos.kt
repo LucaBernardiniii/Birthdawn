@@ -55,6 +55,19 @@ object Photos {
         null
     }
 
+    /** Salva una foto letta da uno stream (es. la foto di un contatto). Restituisce il nome del file. */
+    fun importFromStream(context: Context, input: java.io.InputStream, personId: String): String? {
+        val tmp = File(context.cacheDir, "contact_photo.tmp")
+        return try {
+            input.use { i -> FileOutputStream(tmp).use { i.copyTo(it) } }
+            importFromUri(context, Uri.fromFile(tmp), personId)
+        } catch (e: Exception) {
+            null
+        } finally {
+            tmp.delete()
+        }
+    }
+
     /** Carica una foto già salvata, ridotta a circa [maxSize] pixel. */
     fun load(context: Context, name: String, maxSize: Int): ImageBitmap? {
         val key = "$name@$maxSize"

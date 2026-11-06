@@ -226,4 +226,56 @@
     <string name="license_sub">GNU GPL v3: free and open source</string>
     <string name="made_with_love">Made with ❤️ in Italy</string>
     <string name="open_link_failed">No app can open this link</string>
+    <!-- Rubrica e batteria -->
+    <string name="contacts">Contacts</string>
+    <string name="import_contacts">Import from contacts</string>
+    <string name="import_contacts_sub">Add the birthdays saved in your phone's contacts</string>
+    <string name="contacts_welcome_title">Import birthdays from your contacts?</string>
+    <string name="contacts_welcome_text">Birthdawn can read the birthdays already saved in your contacts, so you don\'t have to add everyone by hand. Nothing leaves your phone. You can also do this later from Settings.</string>
+    <string name="contacts_allow">Import</string>
+    <string name="not_now">Not now</string>
+    <string name="contacts_denied">No access to contacts. You can import them later from Settings → Contacts.</string>
+    <string name="import_photos_too">Import contact photos too</string>
+    <string name="select_someone">Select someone to import</string>
+    <string name="select_all">Select all</string>
+    <string name="no_contact_birthdays">No birthdays found in your contacts</string>
+    <string name="no_contact_birthdays_sub">Add a birthday to a contact in your Contacts app and try again, or add people directly in Birthdawn.</string>
+    <string name="importing_contacts">Importing…</string>
+    <string name="already_in_birthdawn">Already in Birthdawn</string>
+    <string name="battery_title">Reliable reminders</string>
+    <string name="battery_headline">Never miss a reminder</string>
+    <string name="battery_intro">To save battery, some phones stop apps running in the background, and reminders may arrive late or not at all. These steps let Birthdawn check birthdays once a day, even when it\'s closed. It uses almost no battery.</string>
+    <string name="step_notifications_title">Allow notifications</string>
+    <string name="step_notifications_ok">Notifications are on.</string>
+    <string name="step_notifications_text">Notifications are off for Birthdawn, so reminders can\'t be shown.</string>
+    <string name="open_settings">Open settings</string>
+    <string name="step_battery_title">Remove battery optimisation</string>
+    <string name="step_battery_ok">Birthdawn can run in the background.</string>
+    <string name="step_battery_text">Tap Allow and confirm in the window that appears.</string>
+    <string name="allow">Allow</string>
+    <string name="step_unrestricted_title">Set battery usage to \"Unrestricted\"</string>
+    <string name="step_unrestricted_text">On many phones: App info → Battery (or App battery usage) → Unrestricted. Also check that background activity is allowed.</string>
+    <string name="open_app_info">Open app info</string>
+    <string name="step_vendor_title">Extra step for %1$s</string>
+    <string name="more_info">More info</string>
+    <string name="continue_label">Continue</string>
+    <string name="battery_status_ok">No restrictions: reminders arrive on time</string>
+    <string name="battery_status_restricted">Battery optimised: tap to check</string>
+    <string name="battery_tip_xiaomi">In App info: turn on Autostart, then Battery saver → No restrictions.</string>
+    <string name="battery_tip_samsung">Settings → Battery → Background usage limits: make sure Birthdawn isn\'t in \"Sleeping apps\" or \"Deep sleeping apps\". You can add it to \"Never sleeping apps\".</string>
+    <string name="battery_tip_huawei">Settings → Battery → App launch: turn off \"Manage automatically\" for Birthdawn and leave all three switches on.</string>
+    <string name="battery_tip_oppo">In App info → Battery usage: turn on \"Allow background activity\" and \"Allow auto launch\".</string>
+    <string name="battery_tip_vivo">Settings → Battery → Background power consumption: allow Birthdawn. In iManager, allow Autostart too.</string>
+    <plurals name="contacts_imported">
+        <item quantity="one">%d person imported</item>
+        <item quantity="other">%d people imported</item>
+    </plurals>
+    <plurals name="import_n_people">
+        <item quantity="one">Import %d person</item>
+        <item quantity="other">Import %d people</item>
+    </plurals>
+    <plurals name="contacts_found">
+        <item quantity="one">%d birthday found in your contacts</item>
+        <item quantity="other">%d birthdays found in your contacts</item>
+    </plurals>
 </resources>

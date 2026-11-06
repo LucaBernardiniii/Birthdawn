@@ -102,13 +102,18 @@ private val SWATCHES = listOf(
 ).map { Color(it) }
 
 @Composable
-fun SettingsScreen(onBack: () -> Unit) {
+fun SettingsScreen(
+    onBack: () -> Unit,
+    onImportContacts: () -> Unit = {},
+    onBattery: () -> Unit = {},
+) {
     val context = LocalContext.current
     val appearance by AppearanceSettings.state.collectAsState()
     var timeLabel by remember { mutableStateOf(Prefs.timeLabel(context)) }
     var showTimePicker by remember { mutableStateOf(false) }
     var myBirthday by remember { mutableStateOf(Prefs.myBirthday(context)) }
     var showMyBirthday by remember { mutableStateOf(false) }
+    val batteryOk = remember { BatteryHelper.isUnrestricted(context) }
 
     // ---- Backup ----
     val scope = rememberCoroutineScope()
@@ -231,6 +236,27 @@ fun SettingsScreen(onBack: () -> Unit) {
                             ).show()
                         }
                     },
+                )
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.battery_title)) },
+                    supportingContent = {
+                        Text(stringResource(if (batteryOk) R.string.battery_status_ok else R.string.battery_status_restricted))
+                    },
+                    leadingContent = { Text("🔋", style = MaterialTheme.typography.titleLarge) },
+                    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                    modifier = Modifier.clickable(onClick = onBattery),
+                )
+            }
+
+            // ---------- Rubrica ----------
+            SettingsSection(stringResource(R.string.contacts))
+            SettingsCard {
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.import_contacts)) },
+                    supportingContent = { Text(stringResource(R.string.import_contacts_sub)) },
+                    leadingContent = { Text("📇", style = MaterialTheme.typography.titleLarge) },
+                    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                    modifier = Modifier.clickable(onClick = onImportContacts),
                 )
             }
 

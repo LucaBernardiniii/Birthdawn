@@ -225,4 +225,56 @@
     <string name="license_sub">GNU GPL v3: libera e open source</string>
     <string name="made_with_love">Fatta con ❤️ in Italia</string>
     <string name="open_link_failed">Nessuna app può aprire questo link</string>
+    <!-- Rubrica e batteria -->
+    <string name="contacts">Rubrica</string>
+    <string name="import_contacts">Importa dalla rubrica</string>
+    <string name="import_contacts_sub">Aggiungi i compleanni salvati nei contatti del telefono</string>
+    <string name="contacts_welcome_title">Importare i compleanni dalla rubrica?</string>
+    <string name="contacts_welcome_text">Birthdawn può leggere i compleanni già salvati nei tuoi contatti, così non devi aggiungere tutti a mano. Nessun dato esce dal telefono. Puoi farlo anche più tardi dalle Impostazioni.</string>
+    <string name="contacts_allow">Importa</string>
+    <string name="not_now">Non ora</string>
+    <string name="contacts_denied">Nessun accesso ai contatti. Puoi importarli più tardi da Impostazioni → Rubrica.</string>
+    <string name="import_photos_too">Importa anche le foto dei contatti</string>
+    <string name="select_someone">Seleziona chi importare</string>
+    <string name="select_all">Seleziona tutti</string>
+    <string name="no_contact_birthdays">Nessun compleanno trovato nei contatti</string>
+    <string name="no_contact_birthdays_sub">Aggiungi un compleanno a un contatto dall\'app Contatti e riprova, oppure aggiungi le persone direttamente in Birthdawn.</string>
+    <string name="importing_contacts">Importazione in corso…</string>
+    <string name="already_in_birthdawn">Già presente in Birthdawn</string>
+    <string name="battery_title">Notifiche puntuali</string>
+    <string name="battery_headline">Non perderti nessun promemoria</string>
+    <string name="battery_intro">Per risparmiare batteria, alcuni telefoni bloccano le app in background e i promemoria possono arrivare in ritardo o non arrivare. Con questi passaggi Birthdawn può controllare i compleanni una volta al giorno anche quando è chiusa. Consuma pochissima batteria.</string>
+    <string name="step_notifications_title">Consenti le notifiche</string>
+    <string name="step_notifications_ok">Le notifiche sono attive.</string>
+    <string name="step_notifications_text">Le notifiche di Birthdawn sono disattivate, quindi i promemoria non possono comparire.</string>
+    <string name="open_settings">Apri impostazioni</string>
+    <string name="step_battery_title">Togli l\'ottimizzazione della batteria</string>
+    <string name="step_battery_ok">Birthdawn può funzionare in background.</string>
+    <string name="step_battery_text">Tocca Consenti e conferma nella finestra che compare.</string>
+    <string name="allow">Consenti</string>
+    <string name="step_unrestricted_title">Imposta l\'uso della batteria su \"Senza restrizioni\"</string>
+    <string name="step_unrestricted_text">Su molti telefoni: Info app → Batteria (o Utilizzo batteria app) → Senza restrizioni. Controlla anche che l\'attività in background sia consentita.</string>
+    <string name="open_app_info">Apri info app</string>
+    <string name="step_vendor_title">Passaggio extra per %1$s</string>
+    <string name="more_info">Più info</string>
+    <string name="continue_label">Continua</string>
+    <string name="battery_status_ok">Nessuna restrizione: i promemoria arrivano puntuali</string>
+    <string name="battery_status_restricted">Batteria ottimizzata: tocca per controllare</string>
+    <string name="battery_tip_xiaomi">In Info app: attiva Avvio automatico, poi Risparmio batteria → Nessuna restrizione.</string>
+    <string name="battery_tip_samsung">Impostazioni → Batteria → Limiti utilizzo in background: controlla che Birthdawn non sia tra le \"App in sospensione\" o \"App in sospensione profonda\". Puoi aggiungerla alle \"App mai in sospensione\".</string>
+    <string name="battery_tip_huawei">Impostazioni → Batteria → Avvio app: disattiva \"Gestisci automaticamente\" per Birthdawn e lascia attivi tutti e tre gli interruttori.</string>
+    <string name="battery_tip_oppo">In Info app → Utilizzo batteria: attiva \"Consenti attività in background\" e \"Consenti avvio automatico\".</string>
+    <string name="battery_tip_vivo">Impostazioni → Batteria → Consumo energetico in background elevato: consenti Birthdawn. In iManager consenti anche l\'Avvio automatico.</string>
+    <plurals name="contacts_imported">
+        <item quantity="one">%d persona importata</item>
+        <item quantity="other">%d persone importate</item>
+    </plurals>
+    <plurals name="import_n_people">
+        <item quantity="one">Importa %d persona</item>
+        <item quantity="other">Importa %d persone</item>
+    </plurals>
+    <plurals name="contacts_found">
+        <item quantity="one">%d compleanno trovato nei contatti</item>
+        <item quantity="other">%d compleanni trovati nei contatti</item>
+    </plurals>
 </resources>

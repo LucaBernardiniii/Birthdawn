@@ -1,5 +1,6 @@
 <p><b>Birthdawn</b> reminds you of the birthdays that matter, without accounts, ads or internet access.</p>
 <ul>
+<li>Import birthdays from your contacts in one tap, photos included</li>
 <li>Carousel of upcoming birthdays and a special card for whoever celebrates today</li>
 <li>Monthly calendar, search and sorting (upcoming, A–Z, January → December)</li>
 <li>Notifications 7 days before and on the day, plus custom reminders for each person</li>
@@ -10,4 +11,4 @@
 <li>Backup and restore of all your data to a single .zip file</li>
 <li>English and Italian</li>
 </ul>
-<p>Everything stays on your phone. The app only asks for notification and boot permissions.</p>
+<p>Everything stays on your phone. Contacts are read only if you choose to import them.</p>

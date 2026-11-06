@@ -1,0 +1,1 @@
+Birthdawn 2.1: importa i compleanni dalla rubrica (anche con le foto), una schermata guidata per avere notifiche puntuali sui telefoni che limitano le app in background e la sezione Informazioni.

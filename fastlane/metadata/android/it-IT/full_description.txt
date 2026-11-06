@@ -1,5 +1,6 @@
 <p><b>Birthdawn</b> ti ricorda i compleanni che contano, senza account, pubblicità né accesso a internet.</p>
 <ul>
+<li>Importa i compleanni dalla rubrica con un tocco, foto comprese</li>
 <li>Carosello dei prossimi compleanni e una scheda speciale per chi festeggia oggi</li>
 <li>Calendario mensile, ricerca e ordinamento (in arrivo, A–Z, gennaio → dicembre)</li>
 <li>Notifiche 7 giorni prima e il giorno stesso, più promemoria personalizzati per ogni persona</li>
@@ -10,4 +11,4 @@
 <li>Backup e ripristino di tutti i dati in un unico file .zip</li>
 <li>Italiano e inglese</li>
 </ul>
-<p>Tutto resta sul tuo telefono. L'app chiede solo i permessi per le notifiche e per l'avvio del telefono.</p>
+<p>Tutto resta sul tuo telefono. I contatti vengono letti solo se scegli di importarli.</p>

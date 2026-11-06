@@ -53,5 +53,14 @@ object Prefs {
         sp(context).edit().putString("home_sort", value).apply()
     }
 
+    // ---- Primo avvio ----
+    /** true dopo che all'avvio è stato chiesto se importare la rubrica (qualunque sia la risposta). */
+    fun contactsAsked(context: Context) = sp(context).getBoolean("contacts_asked", false)
+    fun setContactsAsked(context: Context) = sp(context).edit().putBoolean("contacts_asked", true).apply()
+
+    /** true dopo che all'avvio è stata mostrata la schermata delle restrizioni della batteria. */
+    fun batteryAsked(context: Context) = sp(context).getBoolean("battery_asked", false)
+    fun setBatteryAsked(context: Context) = sp(context).edit().putBoolean("battery_asked", true).apply()
+
     fun timeLabel(context: Context) = "%02d:%02d".format(hour(context), minute(context))
 }

@@ -1,0 +1,1 @@
+Birthdawn 2.1: import birthdays from your contacts (with photos), a guided screen to make reminders reliable on phones that limit background apps, and an About section.

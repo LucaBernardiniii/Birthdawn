@@ -6,6 +6,7 @@ package dev.luca.birthdawn.data
  * @param year anno di nascita, null se non conosciuto
  * @param photoPath nome del file della foto dentro filesDir/photos
  * @param reminderDays giorni di anticipo per le notifiche (0 = il giorno stesso)
+ * @param contactKey lookup key del contatto della rubrica, se importata da lì
  */
 data class Person(
     val id: String,
@@ -18,6 +19,8 @@ data class Person(
     val reminderDays: List<Int> = DEFAULT_REMINDERS,
     val gifts: List<GiftIdea> = emptyList(),
     val photoFocus: PhotoFocus = PhotoFocus(),
+    /** Chiave del contatto della rubrica da cui è stata importata (per non importarla due volte). */
+    val contactKey: String? = null,
 ) {
     companion object {
         val DEFAULT_REMINDERS = listOf(7, 0)

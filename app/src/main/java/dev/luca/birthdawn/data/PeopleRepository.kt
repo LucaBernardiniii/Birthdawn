@@ -49,6 +49,14 @@ object PeopleRepository {
         writeFile(context.applicationContext, list)
     }
 
+    /** Aggiunge più persone in una sola scrittura su disco (import dalla rubrica). */
+    fun addAll(context: Context, newPeople: List<Person>) {
+        if (newPeople.isEmpty()) return
+        val list = _people.value + newPeople
+        _people.value = list
+        writeFile(context.applicationContext, list)
+    }
+
     /** Modifica solo le idee regalo di una persona. */
     fun updateGifts(context: Context, personId: String, transform: (List<GiftIdea>) -> List<GiftIdea>) {
         val person = get(personId) ?: return
@@ -92,6 +100,7 @@ object PeopleRepository {
         put("day", p.day)
         p.year?.let { put("year", it) }
         p.photoPath?.let { put("photo", it) }
+        p.contactKey?.let { put("contact", it) }
         put("notes", p.notes)
         put("reminders", JSONArray().apply { p.reminderDays.forEach { put(it) } })
         put("focus", JSONObject().apply {
@@ -138,6 +147,7 @@ object PeopleRepository {
             day = o.getInt("day"),
             year = if (has("year")) o.getInt("year") else null,
             photoPath = if (has("photo")) o.getString("photo") else null,
+            contactKey = if (has("contact")) o.getString("contact") else null,
             notes = if (has("notes")) o.getString("notes") else "",
             reminderDays = reminders,
             gifts = gifts,

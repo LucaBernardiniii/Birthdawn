@@ -3,6 +3,10 @@
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- Facoltativo: chiesto solo quando l'utente sceglie di importare i compleanni dalla rubrica -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- Mostra il dialogo di sistema per togliere l'ottimizzazione della batteria -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <application
         android:allowBackup="true"

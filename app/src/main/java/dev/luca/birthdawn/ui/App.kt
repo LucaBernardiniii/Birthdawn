@@ -74,12 +74,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import dev.luca.birthdawn.data.PeopleRepository
+import dev.luca.birthdawn.notify.Prefs
 import dev.luca.birthdawn.util.formatLongDate
 import java.time.LocalDate
 
 // Rotte: "main", "settings", "person:<id>" (visualizza), "edit:<id>" (modifica), "edit:" (nuova persona)
 private const val ROUTE_MAIN = "main"
 private const val ROUTE_SETTINGS = "settings"
+private const val ROUTE_IMPORT = "import"
+private const val ROUTE_BATTERY = "battery"
+private const val ROUTE_BATTERY_FIRST = "battery_first"
 private const val PERSON = "person:"
 private const val EDIT = "edit:"
 
@@ -94,6 +98,45 @@ fun App(
     var tab by rememberSaveable { mutableIntStateOf(0) }
     var route by rememberSaveable { mutableStateOf(ROUTE_MAIN) }
     val today = LocalDate.now()
+    val context = LocalContext.current
+
+    // ---- Primo avvio: rubrica, poi restrizioni della batteria ----
+    var showContactsWelcome by rememberSaveable { mutableStateOf(!Prefs.contactsAsked(context)) }
+    var importFromWelcome by rememberSaveable { mutableStateOf(false) }
+    fun afterContactsStep() {
+        importFromWelcome = false
+        if (!Prefs.batteryAsked(context)) {
+            Prefs.setBatteryAsked(context)
+            if (!BatteryHelper.isUnrestricted(context)) {
+                route = ROUTE_BATTERY_FIRST
+                return
+            }
+        }
+        route = ROUTE_MAIN
+    }
+    val askContactsFromWelcome = rememberContactsPermission(
+        onGranted = {
+            importFromWelcome = true
+            route = ROUTE_IMPORT
+        },
+        onDenied = { afterContactsStep() },
+    )
+    val askContactsFromSettings = rememberContactsPermission(onGranted = { route = ROUTE_IMPORT })
+
+    if (showContactsWelcome && route == ROUTE_MAIN) {
+        ContactsWelcomeDialog(
+            onImport = {
+                showContactsWelcome = false
+                Prefs.setContactsAsked(context)
+                askContactsFromWelcome()
+            },
+            onLater = {
+                showContactsWelcome = false
+                Prefs.setContactsAsked(context)
+                afterContactsStep()
+            },
+        )
+    }
 
     LaunchedEffect(personToOpen) {
         if (personToOpen != null) {
@@ -124,7 +167,31 @@ fun App(
         when {
             current == ROUTE_SETTINGS -> {
                 BackHandler { route = ROUTE_MAIN }
-                SettingsScreen(onBack = { route = ROUTE_MAIN })
+                SettingsScreen(
+                    onBack = { route = ROUTE_MAIN },
+                    onImportContacts = askContactsFromSettings,
+                    onBattery = { route = ROUTE_BATTERY },
+                )
+            }
+
+            current == ROUTE_IMPORT -> {
+                val leave: () -> Unit = {
+                    if (importFromWelcome) afterContactsStep() else route = ROUTE_SETTINGS
+                    Unit
+                }
+                val finished: () -> Unit = {
+                    if (importFromWelcome) afterContactsStep() else route = ROUTE_MAIN
+                    Unit
+                }
+                BackHandler { leave() }
+                ContactsImportScreen(onBack = leave, onDone = finished)
+            }
+
+            current == ROUTE_BATTERY || current == ROUTE_BATTERY_FIRST -> {
+                val first = current == ROUTE_BATTERY_FIRST
+                val leave: () -> Unit = { route = if (first) ROUTE_MAIN else ROUTE_SETTINGS }
+                BackHandler { leave() }
+                BatteryScreen(firstRun = first, onDone = leave)
             }
 
             current.startsWith(PERSON) -> {
