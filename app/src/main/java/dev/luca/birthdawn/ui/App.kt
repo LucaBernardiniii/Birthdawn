@@ -41,6 +41,9 @@ import androidx.compose.ui.unit.lerp
 import dev.luca.birthdawn.ui.theme.AppearanceSettings
 import dev.luca.birthdawn.ui.theme.barColor
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -75,6 +78,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import dev.luca.birthdawn.data.PeopleRepository
 import dev.luca.birthdawn.notify.Prefs
+import dev.luca.birthdawn.ui.theme.AccentMode
 import dev.luca.birthdawn.util.formatLongDate
 import java.time.LocalDate
 
@@ -157,10 +161,29 @@ fun App(
         )
     }
 
+    // ---- Regalo di compleanno: il giorno del compleanno dell'utente si sblocca l'aspetto Dusk ----
+    var showGift by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(route) {
+        if (route == ROUTE_MAIN && !Prefs.duskUnlocked(context) && Prefs.isMyBirthdayToday(context)) {
+            Prefs.setDuskUnlocked(context)
+            showGift = true
+        }
+    }
+
     AnimatedContent(
         targetState = route,
         transitionSpec = {
-            (fadeIn() + slideInVertically { it / 12 }) togetherWith fadeOut()
+            val back = routeDepth(targetState) < routeDepth(initialState)
+            if (back) {
+                // Indietro: la pagina attuale sfuma (e resta sopra) lasciando vedere quella precedente
+                val transform = (fadeIn(tween(220)) + scaleIn(tween(320), initialScale = 0.96f)) togetherWith
+                    (fadeOut(tween(260)) + scaleOut(tween(320), targetScale = 1.04f)) using
+                    SizeTransform(clip = false)
+                transform.targetContentZIndex = -1f
+                transform
+            } else {
+                (fadeIn(tween(260)) + slideInVertically(tween(320)) { it / 12 }) togetherWith fadeOut(tween(200))
+            }
         },
         label = "screen",
     ) { current ->
@@ -247,6 +270,30 @@ fun App(
             }
         }
     }
+
+    if (showGift && !showContactsWelcome) {
+        DuskGiftScreen(
+            name = Prefs.myBirthday(context)?.name,
+            onUseNow = {
+                AppearanceSettings.update(
+                    context,
+                    AppearanceSettings.state.value.copy(mode = AccentMode.DUSK),
+                )
+                showGift = false
+            },
+            onLater = { showGift = false },
+        )
+    }
+}
+
+/** Profondità di una schermata: tornare a una meno profonda è un "indietro". */
+private fun routeDepth(route: String): Int = when {
+    route == ROUTE_MAIN -> 0
+    route == ROUTE_SETTINGS || route == ROUTE_BATTERY_FIRST -> 1
+    route.startsWith(PERSON) -> 1
+    route == EDIT -> 1 // nuova persona, dalla Home
+    route.startsWith(EDIT) -> 2 // modifica, dalla pagina della persona
+    else -> 2 // rubrica e batteria, dalle impostazioni
 }
 
 @Composable

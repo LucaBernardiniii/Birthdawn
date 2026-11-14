@@ -69,7 +69,9 @@ object Notifier {
         val title = if (who != null) ctx.getString(R.string.notif_own_title_named, who)
         else ctx.getString(R.string.notif_own_title)
         val text = (age?.takeIf { it > 0 }?.let { ctx.resources.getQuantityString(R.plurals.notif_own_age, it, it) } ?: "") +
-            ctx.getString(R.string.notif_own_text)
+            ctx.getString(R.string.notif_own_text) +
+            // Al primo compleanno con l'app c'è un regalo che aspetta dentro Birthdawn
+            (if (!Prefs.duskUnlocked(context)) " " + ctx.getString(R.string.notif_own_gift) else "")
         post(context, 7777, title, text, text, null)
     }
 

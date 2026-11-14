@@ -1,0 +1,1 @@
+Birthdawn 2.3: smoother navigation, with pages that fade back into the previous one. Plus a little surprise… set your birthday in Settings and wait for the day 🎁

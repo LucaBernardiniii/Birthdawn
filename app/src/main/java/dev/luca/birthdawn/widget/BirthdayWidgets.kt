@@ -139,6 +139,9 @@ object BirthdayWidgets {
         val layout = if (style == WidgetStyle.DAWN) R.layout.widget_birthdays_dawn else R.layout.widget_birthdays_you
         val views = RemoteViews(context.packageName, layout)
         views.setTextViewText(R.id.widget_today, formatDayMonth(today.dayOfMonth, today.monthValue))
+        // Testi presi dalla lingua scelta nell'app (il layout userebbe quella del telefono)
+        views.setTextViewText(R.id.widget_title, ctx.getString(R.string.widget_title))
+        views.setTextViewText(R.id.widget_empty, ctx.getString(R.string.widget_empty))
         views.setOnClickPendingIntent(android.R.id.background, openApp(context, null, widgetId * 10))
         views.removeAllViews(R.id.widget_cards)
         views.setViewVisibility(R.id.widget_empty, if (upcoming.isEmpty()) View.VISIBLE else View.GONE)

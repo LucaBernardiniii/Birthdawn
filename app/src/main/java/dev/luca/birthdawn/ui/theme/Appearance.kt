@@ -4,8 +4,11 @@ import android.content.Context
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-/** DAWN = sfondo sfumato "alba" (predefinito), SYSTEM = colori dello sfondo del telefono, CUSTOM = colore scelto. */
-enum class AccentMode { DAWN, SYSTEM, CUSTOM }
+/**
+ * DAWN = sfondo sfumato "alba" (predefinito), SYSTEM = colori dello sfondo del telefono, CUSTOM = colore scelto,
+ * DUSK = sfondo "tramonto", regalo sbloccato il giorno del compleanno dell'utente.
+ */
+enum class AccentMode { DAWN, SYSTEM, CUSTOM, DUSK }
 
 /** Tema chiaro, scuro o come il dispositivo. */
 enum class ThemeMode { SYSTEM, LIGHT, DARK }

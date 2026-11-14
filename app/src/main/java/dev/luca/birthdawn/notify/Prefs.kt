@@ -19,6 +19,17 @@ object Prefs {
         sp(context).edit().putString("last_check", date).apply()
     }
 
+    // ---- Regalo di compleanno: l'aspetto "Dusk" ----
+    /** true dopo il primo compleanno dell'utente con l'app: da allora Dusk è sempre disponibile. */
+    fun duskUnlocked(context: Context) = sp(context).getBoolean("dusk_unlocked", false)
+    fun setDuskUnlocked(context: Context) = sp(context).edit().putBoolean("dusk_unlocked", true).commit()
+
+    /** true se oggi è il compleanno dell'utente (impostato nelle impostazioni). */
+    fun isMyBirthdayToday(context: Context, today: java.time.LocalDate = java.time.LocalDate.now()): Boolean {
+        val me = myBirthday(context) ?: return false
+        return dev.luca.birthdawn.util.birthdayIn(today.year, me.month, me.day) == today
+    }
+
     // ---- Il tuo compleanno ----
     data class MyBirthday(val name: String, val month: Int, val day: Int, val year: Int?)
 

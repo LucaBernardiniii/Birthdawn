@@ -287,4 +287,14 @@
     <string name="widget_you_desc">Your next birthdays in your wallpaper colours</string>
     <string name="widget_preview_in5">In 5 days</string>
     <string name="widget_preview_in12">In 12 days</string>
+    <!-- Regalo di compleanno (aspetto Dusk) -->
+    <string name="dusk_title">Dusk</string>
+    <string name="dusk_subtitle">A sunset sky, from gold to lavender. Your birthday gift 🎁</string>
+    <string name="notif_own_gift">🎁 A gift is waiting for you in the app!</string>
+    <string name="gift_title">Happy birthday! 🎉</string>
+    <string name="gift_title_named">Happy birthday, %1$s! 🎉</string>
+    <string name="gift_text">Here\'s your gift: a brand-new look called Dusk, with the colours of the sunset.</string>
+    <string name="gift_where">It\'s yours forever: you\'ll find it in Settings → Appearance.</string>
+    <string name="gift_use_now">Use it now</string>
+    <string name="gift_later">Maybe later</string>
 </resources>

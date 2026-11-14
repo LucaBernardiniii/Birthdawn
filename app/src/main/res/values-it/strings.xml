@@ -286,4 +286,14 @@
     <string name="widget_you_desc">I prossimi compleanni con i colori del tuo sfondo</string>
     <string name="widget_preview_in5">Tra 5 giorni</string>
     <string name="widget_preview_in12">Tra 12 giorni</string>
+    <!-- Regalo di compleanno (aspetto Dusk) -->
+    <string name="dusk_title">Tramonto</string>
+    <string name="dusk_subtitle">Un cielo al tramonto, dall\'oro alla lavanda. Il tuo regalo di compleanno 🎁</string>
+    <string name="notif_own_gift">🎁 Nell\'app c\'è un regalo che ti aspetta!</string>
+    <string name="gift_title">Buon compleanno! 🎉</string>
+    <string name="gift_title_named">Buon compleanno, %1$s! 🎉</string>
+    <string name="gift_text">Ecco il tuo regalo: un aspetto tutto nuovo chiamato Tramonto, con i colori del cielo al calar del sole.</string>
+    <string name="gift_where">È tuo per sempre: lo trovi in Impostazioni → Aspetto.</string>
+    <string name="gift_use_now">Usalo subito</string>
+    <string name="gift_later">Più tardi</string>
 </resources>

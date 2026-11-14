@@ -196,6 +196,32 @@ fun dawnBackdrop(dark: Boolean): Backdrop {
     )
 }
 
+private val DuskLightStops = arrayOf(
+    0.00f to Color(0xFFFFE2B0), // oro
+    0.30f to Color(0xFFFFC59C), // albicocca
+    0.55f to Color(0xFFF9A9A6), // rosa
+    0.80f to Color(0xFFDC9DC6), // malva
+    1.00f to Color(0xFFAA90D8), // lavanda
+)
+
+private val DuskDarkStops = arrayOf(
+    0.00f to Color(0xFF1A1033), // viola notte
+    0.25f to Color(0xFF34194C),
+    0.50f to Color(0xFF5E2150), // magenta
+    0.75f to Color(0xFF8C2F45), // rosso
+    1.00f to Color(0xFFAD4B30), // arancione del sole che tramonta
+)
+
+/** Gradiente "tramonto" del tema Dusk. */
+fun duskBackdrop(dark: Boolean): Backdrop {
+    val stops = if (dark) DuskDarkStops else DuskLightStops
+    return Backdrop(
+        brush = Brush.verticalGradient(colorStops = stops),
+        top = stops.first().second,
+        bottom = stops.last().second,
+    )
+}
+
 /** Superfici trasparenti (si vede il cielo) e card "vetro" semitrasparenti. */
 private val DawnLight = lightColorScheme(
     primary = Color(0xFFD2552F),
@@ -253,6 +279,41 @@ private val DawnDark = darkColorScheme(
     outlineVariant = Color(0xFF53433F),
 )
 
+private val DuskLight = DawnLight.copy(
+    primary = Color(0xFFB13F6B),
+    onPrimary = Color.White,
+    primaryContainer = Color(0xFFFFD9E3),
+    onPrimaryContainer = Color(0xFF3E0021),
+    secondary = Color(0xFF7D5672),
+    secondaryContainer = Color(0xFFFFD7F2),
+    onSecondaryContainer = Color(0xFF30132B),
+    tertiary = Color(0xFFB45F1E),
+    tertiaryContainer = Color(0xFFFFDCC2),
+    onTertiaryContainer = Color(0xFF331200),
+    onBackground = Color(0xFF26181F),
+    onSurface = Color(0xFF26181F),
+    surfaceContainerHigh = Color(0xFFFFF3F5),
+    surfaceContainerHighest = Color(0xFFF7E5EC),
+)
+
+private val DuskDark = DawnDark.copy(
+    primary = Color(0xFFFFB0C8),
+    onPrimary = Color(0xFF5E1134),
+    primaryContainer = Color(0xFF7D294B),
+    onPrimaryContainer = Color(0xFFFFD9E3),
+    secondary = Color(0xFFEDB8DC),
+    secondaryContainer = Color(0xFF63395A),
+    onSecondaryContainer = Color(0xFFFFD7F2),
+    tertiary = Color(0xFFFFB783),
+    tertiaryContainer = Color(0xFF7A3A08),
+    onTertiaryContainer = Color(0xFFFFDCC2),
+    onBackground = Color(0xFFF7E1EA),
+    onSurface = Color(0xFFF7E1EA),
+    surfaceContainerLowest = Color(0xFF160C22),
+    surfaceContainerHigh = Color(0xFF33202F),
+    surfaceContainerHighest = Color(0xFF402A3A),
+)
+
 /** Sfondo opaco per una schermata: il cielo dell'alba, oppure il colore di sfondo normale. */
 @Composable
 fun Modifier.screenBackground(): Modifier {
@@ -282,13 +343,17 @@ fun BirthdawnTheme(dark: Boolean, content: @Composable () -> Unit) {
                 if (dark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
             appearance.mode == AccentMode.CUSTOM ->
                 schemeFromSeed(Color(appearance.customColor), dark)
+            appearance.mode == AccentMode.DUSK -> if (dark) DuskDark else DuskLight
             else -> if (dark) DawnDark else DawnLight
         }
     }
     val backdrop = remember(appearance.mode, dark) {
-        if (appearance.mode == AccentMode.DAWN || (appearance.mode == AccentMode.SYSTEM && !supportsDynamicColor)) {
-            dawnBackdrop(dark)
-        } else null
+        when {
+            appearance.mode == AccentMode.DUSK -> duskBackdrop(dark)
+            appearance.mode == AccentMode.DAWN ||
+                (appearance.mode == AccentMode.SYSTEM && !supportsDynamicColor) -> dawnBackdrop(dark)
+            else -> null
+        }
     }
     CompositionLocalProvider(LocalDarkTheme provides dark, LocalBackdrop provides backdrop) {
         MaterialTheme(colorScheme = scheme) {

@@ -87,6 +87,7 @@ import dev.luca.birthdawn.notify.Notifier
 import dev.luca.birthdawn.notify.Prefs
 import dev.luca.birthdawn.notify.ReminderScheduler
 import dev.luca.birthdawn.ui.theme.AccentMode
+import dev.luca.birthdawn.ui.theme.duskBackdrop
 import dev.luca.birthdawn.ui.theme.ThemeMode
 import dev.luca.birthdawn.ui.theme.LocalDarkTheme
 import dev.luca.birthdawn.ui.theme.dawnBackdrop
@@ -318,6 +319,18 @@ fun SettingsScreen(
                     enabled = true,
                     onClick = { setMode(AccentMode.DAWN) },
                 )
+                // Regalo di compleanno: compare solo dopo il primo compleanno dell'utente con l'app
+                if (remember { Prefs.duskUnlocked(context) } || appearance.mode == AccentMode.DUSK) {
+                    AccentOption(
+                        title = stringResource(R.string.dusk_title),
+                        subtitle = stringResource(R.string.dusk_subtitle),
+                        swatch = null,
+                        swatchBrush = duskBackdrop(LocalDarkTheme.current).brush,
+                        selected = appearance.mode == AccentMode.DUSK,
+                        enabled = true,
+                        onClick = { setMode(AccentMode.DUSK) },
+                    )
+                }
                 val systemColor = remember {
                     if (supportsDynamicColor) dynamicLightColorScheme(context).primary else null
                 }
