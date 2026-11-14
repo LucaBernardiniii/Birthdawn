@@ -2,6 +2,7 @@
 <ul>
 <li>Importa i compleanni dalla rubrica con un tocco, foto comprese</li>
 <li>Carosello dei prossimi compleanni e una scheda speciale per chi festeggia oggi</li>
+<li>Widget per la schermata home in stile Alba e Material You</li>
 <li>Calendario mensile, ricerca e ordinamento (in arrivo, A–Z, gennaio → dicembre)</li>
 <li>Notifiche 7 giorni prima e il giorno stesso, più promemoria personalizzati per ogni persona</li>
 <li>Idee regalo con link: condividi un prodotto da qualsiasi app di shopping direttamente in Birthdawn</li>

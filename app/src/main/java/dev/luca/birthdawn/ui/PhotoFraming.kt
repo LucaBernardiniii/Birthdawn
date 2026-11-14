@@ -68,7 +68,7 @@ val BANNER_HEIGHT = 300.dp
  * Porzione della foto (in pixel dell'immagine) da mostrare in un riquadro W x H,
  * riempiendolo sempre senza bordi vuoti.
  */
-private fun visibleRect(iw: Float, ih: Float, w: Float, h: Float, f: PhotoFocus): Rect {
+internal fun visibleRect(iw: Float, ih: Float, w: Float, h: Float, f: PhotoFocus): Rect {
     if (w <= 0f || h <= 0f || iw <= 0f || ih <= 0f) return Rect(0f, 0f, iw, ih)
     val scale = max(w / iw, h / ih) * f.zoom.coerceIn(1f, MAX_PHOTO_ZOOM)
     val vw = min(w / scale, iw)

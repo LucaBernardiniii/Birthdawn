@@ -37,6 +37,31 @@
             android:name=".notify.ReminderReceiver"
             android:exported="false" />
 
+        <!-- Widget "Prossimi compleanni": stile Alba e stile Material You -->
+        <receiver
+            android:name=".widget.DawnWidgetProvider"
+            android:exported="false"
+            android:label="@string/widget_dawn_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_dawn" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.YouWidgetProvider"
+            android:exported="false"
+            android:label="@string/widget_you_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_you" />
+        </receiver>
+
         <receiver
             android:name=".notify.BootReceiver"
             android:exported="true">
@@ -45,6 +70,7 @@
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
                 <action android:name="android.intent.action.TIME_SET" />
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
             </intent-filter>
         </receiver>
     </application>

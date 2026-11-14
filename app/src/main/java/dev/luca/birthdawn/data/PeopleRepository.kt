@@ -2,6 +2,7 @@ package dev.luca.birthdawn.data
 
 import android.content.Context
 import dev.luca.birthdawn.util.Photos
+import dev.luca.birthdawn.widget.BirthdayWidgets
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.json.JSONArray
@@ -36,6 +37,7 @@ object PeopleRepository {
             _people.value = readFile(context.applicationContext)
             loaded = true
         }
+        BirthdayWidgets.requestUpdate(context)
     }
 
     fun get(id: String): Person? = _people.value.firstOrNull { it.id == id }
@@ -91,6 +93,8 @@ object PeopleRepository {
         val tmp = File(context.filesDir, "$FILE.tmp")
         tmp.writeText(arr.toString())
         tmp.renameTo(File(context.filesDir, FILE))
+        // I widget sulla schermata home mostrano subito le modifiche
+        BirthdayWidgets.requestUpdate(context)
     }
 
     private fun toJson(p: Person) = JSONObject().apply {

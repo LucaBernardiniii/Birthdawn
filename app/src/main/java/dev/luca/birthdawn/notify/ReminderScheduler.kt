@@ -64,6 +64,7 @@ class ReminderReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         ReminderScheduler.runCheck(context, LocalDate.now())
         ReminderScheduler.schedule(context)
+        dev.luca.birthdawn.widget.BirthdayWidgets.requestUpdate(context)
     }
 }
 
@@ -71,5 +72,8 @@ class BootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         ReminderScheduler.schedule(context)
         ReminderScheduler.runCheckIfDue(context)
+        // Dopo riavvio, aggiornamento dell'app o cambio di data/ora
+        dev.luca.birthdawn.widget.BirthdayWidgets.requestUpdate(context)
+        dev.luca.birthdawn.widget.BirthdayWidgets.scheduleMidnight(context)
     }
 }

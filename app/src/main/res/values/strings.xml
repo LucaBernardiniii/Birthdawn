@@ -278,4 +278,13 @@
         <item quantity="one">%d birthday found in your contacts</item>
         <item quantity="other">%d birthdays found in your contacts</item>
     </plurals>
+    <!-- Widget -->
+    <string name="widget_title">Upcoming birthdays</string>
+    <string name="widget_empty">No birthdays yet. Tap to add someone</string>
+    <string name="widget_dawn_name">Birthdays · Dawn</string>
+    <string name="widget_you_name">Birthdays · Material You</string>
+    <string name="widget_dawn_desc">Your next birthdays on a dawn-coloured sky</string>
+    <string name="widget_you_desc">Your next birthdays in your wallpaper colours</string>
+    <string name="widget_preview_in5">In 5 days</string>
+    <string name="widget_preview_in12">In 12 days</string>
 </resources>

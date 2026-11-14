@@ -1,0 +1,1 @@
+Birthdawn 2.2: widget per la schermata home con i prossimi compleanni, come il carosello, in due stili: Alba e Material You (colori dello sfondo).

@@ -60,6 +60,7 @@ A beautiful, lightweight, private birthday reminder for Android — with gift id
 - Search, and sort by **upcoming**, **A–Z** or **January → December**
 - Monthly calendar with every birthday marked
 - Age and countdown for everyone
+- **Home screen widgets** with your next birthdays, in **Dawn** or **Material You** style
 
 </td>
     <td width="50%" valign="top">

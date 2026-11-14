@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Colori dei widget (tema chiaro). Le varianti scure sono in values-night. -->
+<resources>
+    <!-- Widget Alba -->
+    <color name="widget_dawn_top">#FF9FD3F2</color>
+    <color name="widget_dawn_mid">#FFFBE3D3</color>
+    <color name="widget_dawn_bottom">#FFFF8E72</color>
+    <color name="widget_dawn_on_bg">#FF3A2420</color>
+    <color name="widget_dawn_on_bg_variant">#B33A2420</color>
+    <color name="widget_dawn_chip">#FFD2552F</color>
+    <color name="widget_dawn_on_chip">#FFFFFFFF</color>
+    <!-- Widget Material You (prima di Android 12 usa questi colori fissi) -->
+    <color name="widget_you_bg">#FFFFF8F6</color>
+    <color name="widget_you_on_bg">#FF22191A</color>
+    <color name="widget_you_on_bg_variant">#FF524345</color>
+    <color name="widget_you_chip">#FFD9475A</color>
+    <color name="widget_you_on_chip">#FFFFFFFF</color>
+    <color name="widget_you_card">#FFFBEBEC</color>
+</resources>

@@ -2,6 +2,7 @@
 <ul>
 <li>Import birthdays from your contacts in one tap, photos included</li>
 <li>Carousel of upcoming birthdays and a special card for whoever celebrates today</li>
+<li>Home screen widgets in Dawn and Material You styles</li>
 <li>Monthly calendar, search and sorting (upcoming, A–Z, January → December)</li>
 <li>Notifications 7 days before and on the day, plus custom reminders for each person</li>
 <li>Gift ideas with links: share a product from any shopping app straight into Birthdawn</li>

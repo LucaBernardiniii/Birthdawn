@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="widget_dawn_top">#FF13193D</color>
+    <color name="widget_dawn_mid">#FF3B2148</color>
+    <color name="widget_dawn_bottom">#FF792F2E</color>
+    <color name="widget_dawn_on_bg">#FFFFFFFF</color>
+    <color name="widget_dawn_on_bg_variant">#B3FFFFFF</color>
+    <color name="widget_dawn_chip">#FFFFB59C</color>
+    <color name="widget_dawn_on_chip">#FF561F0C</color>
+    <color name="widget_you_bg">#FF1A1112</color>
+    <color name="widget_you_on_bg">#FFF0DEDF</color>
+    <color name="widget_you_on_bg_variant">#FFD7C1C3</color>
+    <color name="widget_you_chip">#FFFFB2B8</color>
+    <color name="widget_you_on_chip">#FF67001F</color>
+    <color name="widget_you_card">#FF271D1E</color>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 12+: il widget Material You prende i colori dallo sfondo del telefono -->
+<resources>
+    <color name="widget_you_bg">@android:color/system_accent2_50</color>
+    <color name="widget_you_on_bg">@android:color/system_accent1_900</color>
+    <color name="widget_you_on_bg_variant">@android:color/system_accent2_700</color>
+    <color name="widget_you_chip">@android:color/system_accent1_600</color>
+    <color name="widget_you_on_chip">@android:color/system_accent1_0</color>
+    <color name="widget_you_card">@android:color/system_accent2_100</color>
+</resources>

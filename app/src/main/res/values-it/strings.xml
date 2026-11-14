@@ -277,4 +277,13 @@
         <item quantity="one">%d compleanno trovato nei contatti</item>
         <item quantity="other">%d compleanni trovati nei contatti</item>
     </plurals>
+    <!-- Widget -->
+    <string name="widget_title">Prossimi compleanni</string>
+    <string name="widget_empty">Ancora nessun compleanno. Tocca per aggiungere qualcuno</string>
+    <string name="widget_dawn_name">Compleanni · Alba</string>
+    <string name="widget_you_name">Compleanni · Material You</string>
+    <string name="widget_dawn_desc">I prossimi compleanni su un cielo all\'alba</string>
+    <string name="widget_you_desc">I prossimi compleanni con i colori del tuo sfondo</string>
+    <string name="widget_preview_in5">Tra 5 giorni</string>
+    <string name="widget_preview_in12">Tra 12 giorni</string>
 </resources>

@@ -32,6 +32,7 @@ object AppLanguage {
 
     fun save(context: Context, code: String) {
         context.getSharedPreferences("settings", Context.MODE_PRIVATE).edit().putString(KEY, code).commit()
+        dev.luca.birthdawn.widget.BirthdayWidgets.requestUpdate(context)
     }
 
     private fun resolve(code: String): Locale = when (code) {
