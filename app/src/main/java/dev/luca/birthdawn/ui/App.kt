@@ -48,6 +48,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import dev.luca.birthdawn.ui.theme.AppearanceSettings
+import dev.luca.birthdawn.ui.theme.screenBackground
 import dev.luca.birthdawn.ui.theme.barColor
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
@@ -311,7 +312,9 @@ fun App(
                         scaleY = s
                     },
             ) {
-                key(parent) { screen(parent) }
+                key(parent) {
+                    Box(Modifier.fillMaxSize().screenBackground()) { screen(parent) }
+                }
             }
         }
 
@@ -344,7 +347,10 @@ fun App(
                 }
             },
             label = "screen",
-        ) { current -> screen(current) }
+        ) { current ->
+            // Ogni pagina ha il suo cielo (nei temi Alba e Tramonto), così sfuma insieme al resto
+            Box(Modifier.fillMaxSize().screenBackground()) { screen(current) }
+        }
     }
 
     if (showGift && !showContactsWelcome) {
