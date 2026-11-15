@@ -1,1 +1,1 @@
-Birthdawn 2.3: smoother navigation, with pages that fade back into the previous one. Plus a little surprise… set your birthday in Settings and wait for the day 🎁
+Birthdawn 2.3: predictive back gesture, the page fades into the previous one as you swipe. Plus a little surprise… set your birthday in Settings and wait for the day 🎁

@@ -1,1 +1,1 @@
-Birthdawn 2.3: navigazione più fluida, con le pagine che sfumano in quella precedente quando torni indietro. E una piccola sorpresa… imposta il tuo compleanno nelle impostazioni e aspetta il giorno 🎁
+Birthdawn 2.3: gesto Indietro predittivo, la pagina sfuma in quella precedente mentre trascini. E una piccola sorpresa… imposta il tuo compleanno nelle impostazioni e aspetta il giorno 🎁

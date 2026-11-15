@@ -2,10 +2,18 @@
 
 package dev.luca.birthdawn.ui
 
+import androidx.activity.compose.PredictiveBackHandler
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.runtime.key
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
+import androidx.compose.foundation.layout.fillMaxSize
 import dev.luca.birthdawn.util.plural
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -170,26 +178,48 @@ fun App(
         }
     }
 
-    AnimatedContent(
-        targetState = route,
-        transitionSpec = {
-            val back = routeDepth(targetState) < routeDepth(initialState)
-            if (back) {
-                // Indietro: la pagina attuale sfuma (e resta sopra) lasciando vedere quella precedente
-                val transform = (fadeIn(tween(220)) + scaleIn(tween(320), initialScale = 0.96f)) togetherWith
-                    (fadeOut(tween(260)) + scaleOut(tween(320), targetScale = 1.04f)) using
-                    SizeTransform(clip = false)
-                transform.targetContentZIndex = -1f
-                transform
-            } else {
-                (fadeIn(tween(260)) + slideInVertically(tween(320)) { it / 12 }) togetherWith fadeOut(tween(200))
-            }
-        },
-        label = "screen",
-    ) { current ->
+    // ---- Indietro ----
+    /** Schermata a cui porta "indietro" (null sulla Home: lì il gesto chiude l'app come al solito). */
+    fun parentOf(r: String): String? = when {
+        r == ROUTE_MAIN -> null
+        r == ROUTE_IMPORT -> if (importFromWelcome) ROUTE_MAIN else ROUTE_SETTINGS
+        r == ROUTE_BATTERY -> ROUTE_SETTINGS
+        r.startsWith(EDIT) && r != EDIT && people.any { it.id == r.removePrefix(EDIT) } ->
+            PERSON + r.removePrefix(EDIT)
+        else -> ROUTE_MAIN
+    }
+
+    fun goBack() {
+        val r = route
+        if (r == ROUTE_IMPORT && importFromWelcome) afterContactsStep()
+        else parentOf(r)?.let { route = it }
+    }
+
+    // Gesto "indietro predittivo" (Android 14+): la pagina sfuma seguendo il dito e mostra quella precedente.
+    // Su Android meno recenti, o con il tasto Indietro, la stessa dissolvenza parte da sola.
+    val scope = rememberCoroutineScope()
+    val backProgress = remember { Animatable(0f) }
+    var instantSwitch by remember { mutableStateOf(false) }
+    val parent = parentOf(route)
+    PredictiveBackHandler(enabled = parent != null) { events ->
+        try {
+            events.collect { e -> backProgress.snapTo(e.progress) }
+            // Dito rilasciato: completa la dissolvenza, poi cambia schermata senza altre animazioni
+            backProgress.animateTo(1f, tween(((1f - backProgress.value) * 280).toInt().coerceAtLeast(60)))
+            instantSwitch = true
+            goBack()
+            backProgress.snapTo(0f)
+        } catch (e: CancellationException) {
+            // Dito riportato al bordo: la pagina torna piena
+            scope.launch { backProgress.animateTo(0f, tween(200)) }
+            throw e
+        }
+    }
+    LaunchedEffect(route) { instantSwitch = false }
+
+    val screen: @Composable (String) -> Unit = { current ->
         when {
             current == ROUTE_SETTINGS -> {
-                BackHandler { route = ROUTE_MAIN }
                 SettingsScreen(
                     onBack = { route = ROUTE_MAIN },
                     onImportContacts = askContactsFromSettings,
@@ -206,19 +236,16 @@ fun App(
                     if (importFromWelcome) afterContactsStep() else route = ROUTE_MAIN
                     Unit
                 }
-                BackHandler { leave() }
                 ContactsImportScreen(onBack = leave, onDone = finished)
             }
 
             current == ROUTE_BATTERY || current == ROUTE_BATTERY_FIRST -> {
                 val first = current == ROUTE_BATTERY_FIRST
                 val leave: () -> Unit = { route = if (first) ROUTE_MAIN else ROUTE_SETTINGS }
-                BackHandler { leave() }
                 BatteryScreen(firstRun = first, onDone = leave)
             }
 
             current.startsWith(PERSON) -> {
-                BackHandler { route = ROUTE_MAIN }
                 val person = people.firstOrNull { it.id == current.removePrefix(PERSON) }
                 if (person == null) {
                     LaunchedEffect(Unit) { route = ROUTE_MAIN }
@@ -235,8 +262,7 @@ fun App(
             current.startsWith(EDIT) -> {
                 val id = current.removePrefix(EDIT)
                 val existing = if (id.isEmpty()) null else people.firstOrNull { it.id == id }
-                val back = { route = if (existing != null) PERSON + existing.id else ROUTE_MAIN }
-                BackHandler { back() }
+                val back: () -> Unit = { goBack() }
                 PersonScreen(
                     existing = existing,
                     onSaved = { savedId -> route = PERSON + savedId },
@@ -269,6 +295,52 @@ fun App(
                 }
             }
         }
+    }
+
+    Box(Modifier.fillMaxSize()) {
+        // Pagina precedente, visibile sotto durante il gesto
+        val progress = backProgress.value
+        if (progress > 0f && parent != null) {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .graphicsLayer {
+                        val s = 0.96f + 0.04f * progress
+                        scaleX = s
+                        scaleY = s
+                    },
+            ) {
+                key(parent) { screen(parent) }
+            }
+        }
+
+        AnimatedContent(
+            targetState = route,
+            modifier = Modifier.graphicsLayer {
+                val p = backProgress.value
+                alpha = 1f - p
+                val s = 1f - 0.05f * p
+                scaleX = s
+                scaleY = s
+            },
+            transitionSpec = {
+                when {
+                    // Fine del gesto: la pagina precedente è già sullo schermo
+                    instantSwitch -> EnterTransition.None togetherWith ExitTransition.None
+                    routeDepth(targetState) < routeDepth(initialState) -> {
+                        // Indietro con la freccia in alto: la pagina attuale sfuma restando sopra
+                        val transform = (fadeIn(tween(220)) + scaleIn(tween(320), initialScale = 0.96f)) togetherWith
+                            (fadeOut(tween(260)) + scaleOut(tween(320), targetScale = 0.95f)) using
+                            SizeTransform(clip = false)
+                        transform.targetContentZIndex = -1f
+                        transform
+                    }
+                    else ->
+                        (fadeIn(tween(260)) + slideInVertically(tween(320)) { it / 12 }) togetherWith fadeOut(tween(200))
+                }
+            },
+            label = "screen",
+        ) { current -> screen(current) }
     }
 
     if (showGift && !showContactsWelcome) {
