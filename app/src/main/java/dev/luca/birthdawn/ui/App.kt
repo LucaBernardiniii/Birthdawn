@@ -41,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.semantics.Role
@@ -318,6 +319,9 @@ fun App(
             targetState = route,
             modifier = Modifier.graphicsLayer {
                 val p = backProgress.value
+                // La pagina viene disegnata intera in un livello a parte e poi sfumata tutta insieme:
+                // senza, sfondo, foto e testi sfumerebbero ognuno per conto suo
+                compositingStrategy = if (p > 0f) CompositingStrategy.Offscreen else CompositingStrategy.Auto
                 alpha = 1f - p
                 val s = 1f - 0.05f * p
                 scaleX = s
