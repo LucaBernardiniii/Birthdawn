@@ -126,7 +126,7 @@
     <string name="photo_color_sub">Ogni persona con una foto avrà la pagina colorata con i toni della sua foto</string>
     <string name="language">Lingua</string>
     <string name="lang_auto">Automatica</string>
-    <string name="lang_auto_hint">Automatica segue la lingua del telefono (italiano se è in italiano, altrimenti inglese).</string>
+    <string name="lang_auto_hint">Automatica segue la lingua del telefono, se supportata; altrimenti usa l’inglese.</string>
     <string name="backup">Backup</string>
     <string name="export_data">Esporta dati</string>
     <string name="export_data_sub">Salva in un file .zip persone, foto, idee regalo, il tuo compleanno e tutte le impostazioni</string>

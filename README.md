@@ -111,7 +111,7 @@ A beautiful, lightweight, private birthday reminder for Android — with gift id
 - 100% offline: no account, no ads, no tracking
 - One-tap **backup & restore** to a single `.zip` file
 - Backups include people, photos, gift ideas, your birthday and all settings
-- Available in **English** and **Italian**
+- Available in **English**, **Italian** and **Spanish**
 
 </td>
   </tr>
@@ -188,11 +188,11 @@ Want your data on another phone? Use **Settings → Backup → Export data** and
 
 <h1><a id="translations"></a>Translations</h1>
 
-<h3>Birthdawn speaks 🇬🇧 English and 🇮🇹 Italian.</h3>
+<h3>Birthdawn speaks 🇬🇧 English, 🇮🇹 Italian and 🇪🇸 Spanish.</h3>
 
 </div>
 
-Choose the language in **Settings → Language**, or leave it on *Automatic* to follow your phone (Italian if your phone is in Italian, English otherwise). Notifications, dates and the system date/time pickers follow your choice.
+Choose the language in **Settings → Language**, or leave it on *Automatic* to follow your phone (when supported, otherwise English). Notifications, dates and the system date/time pickers follow your choice.
 
 **Want Birthdawn in your language?** All texts live in a single file:
 

@@ -207,7 +207,7 @@ fun CalendarScreen(
         item(key = "month-header") {
             SectionHeader(stringResource(
                     R.string.all_birthdays_in,
-                    monthName(ym.monthValue).let { if (AppLanguage.isItalian) it.lowercase() else it },
+                    monthName(ym.monthValue).let { if (AppLanguage.isItalian || AppLanguage.isSpanish) it.lowercase() else it },
                 ))
         }
         if (monthPeople.isEmpty()) {

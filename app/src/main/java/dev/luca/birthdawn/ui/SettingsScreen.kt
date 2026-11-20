@@ -170,6 +170,7 @@ fun SettingsScreen(
                     AppLanguage.SYSTEM to stringResource(R.string.lang_auto),
                     AppLanguage.ITALIAN to "Italiano",
                     AppLanguage.ENGLISH to "English",
+                    AppLanguage.SPANISH to "Español",
                 )
                 SingleChoiceSegmentedButtonRow(
                     Modifier

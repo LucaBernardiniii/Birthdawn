@@ -308,7 +308,7 @@ private fun CountdownCard(person: Person, days: Int, nextDate: LocalDate, turnin
             }
             Text(
                 formatLongDate(nextDate) +
-                    (if (nextDate.year != LocalDate.now().year) (if (AppLanguage.isItalian) " " else ", ") + nextDate.year else "") +
+                    (if (nextDate.year != LocalDate.now().year) (if (AppLanguage.isSpanish) " de " else if (AppLanguage.isItalian) " " else ", ") + nextDate.year else "") +
                     (turning?.let { " · " + turnsLabel(LocalContext.current, it) } ?: ""),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.85f),
