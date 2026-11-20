@@ -36,7 +36,11 @@ fun monthName(month: Int): String =
 /** "1 novembre" / "November 1" */
 fun formatDayMonth(day: Int, month: Int): String {
     val date = LocalDate.of(2000, month, day) // 2000 è bisestile: va bene anche il 29 febbraio
-    val pattern = if (AppLanguage.isItalian) "d MMMM" else "MMMM d"
+    val pattern = when {
+        AppLanguage.isSpanish -> "d 'de' MMMM"
+        AppLanguage.isItalian -> "d MMMM"
+        else -> "MMMM d"
+    }
     return date.format(DateTimeFormatter.ofPattern(pattern, AppLanguage.locale))
 }
 
@@ -45,6 +49,7 @@ fun formatBirthday(day: Int, month: Int, year: Int?): String {
     val base = formatDayMonth(day, month)
     return when {
         year == null -> base
+        AppLanguage.isSpanish -> "$base de $year"
         AppLanguage.isItalian -> "$base $year"
         else -> "$base, $year"
     }
@@ -52,7 +57,11 @@ fun formatBirthday(day: Int, month: Int, year: Int?): String {
 
 /** "Domenica 1 novembre" / "Sunday, November 1" */
 fun formatLongDate(date: LocalDate): String {
-    val pattern = if (AppLanguage.isItalian) "EEEE d MMMM" else "EEEE, MMMM d"
+    val pattern = when {
+        AppLanguage.isSpanish -> "EEEE, d 'de' MMMM"
+        AppLanguage.isItalian -> "EEEE d MMMM"
+        else -> "EEEE, MMMM d"
+    }
     return date.format(DateTimeFormatter.ofPattern(pattern, AppLanguage.locale))
         .replaceFirstChar { it.uppercase() }
 }

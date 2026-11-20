@@ -9,7 +9,7 @@ import android.os.LocaleList
 import java.util.Locale
 
 /**
- * Lingua dell'app: "system" (segue il telefono), "it" o "en".
+ * Lingua dell'app: "system" (segue il telefono), "it", "en" o "es".
  * La lingua viene applicata a tutta l'Activity (testi, mesi, selettori di data e ora)
  * e alle notifiche, avvolgendo il Context con la configurazione giusta.
  */
@@ -17,15 +17,17 @@ object AppLanguage {
     const val SYSTEM = "system"
     const val ITALIAN = "it"
     const val ENGLISH = "en"
+    const val SPANISH = "es"
 
     private const val KEY = "language"
 
-    /** Lingua effettiva in uso (sempre italiano o inglese). */
+    /** Lingua effettiva in uso (italiano, inglese o spagnolo). */
     @Volatile
     var locale: Locale = Locale.ITALIAN
         private set
 
-    val isItalian: Boolean get() = locale.language == "it"
+    val isItalian: Boolean get() = locale.language == ITALIAN
+    val isSpanish: Boolean get() = locale.language == SPANISH
 
     fun saved(context: Context): String =
         context.getSharedPreferences("settings", Context.MODE_PRIVATE).getString(KEY, SYSTEM) ?: SYSTEM
@@ -38,9 +40,14 @@ object AppLanguage {
     private fun resolve(code: String): Locale = when (code) {
         ITALIAN -> Locale.ITALIAN
         ENGLISH -> Locale.ENGLISH
+        SPANISH -> Locale.forLanguageTag("es-ES")
         else -> {
             val system = Resources.getSystem().configuration.locales[0]
-            if (system.language == "it") Locale.ITALIAN else Locale.ENGLISH
+            when (system.language) {
+                ITALIAN -> Locale.ITALIAN
+                SPANISH -> system
+                else -> Locale.ENGLISH
+            }
         }
     }
 

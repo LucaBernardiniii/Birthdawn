@@ -127,7 +127,7 @@
     <string name="photo_color_sub">Each person with a photo gets a page tinted with their photo\'s colours</string>
     <string name="language">Language</string>
     <string name="lang_auto">Automatic</string>
-    <string name="lang_auto_hint">Automatic follows the phone\'s language (Italian if it\'s Italian, otherwise English).</string>
+    <string name="lang_auto_hint">Automatic follows the phone\'s language when supported, otherwise English.</string>
     <string name="backup">Backup</string>
     <string name="export_data">Export data</string>
     <string name="export_data_sub">Save people, photos, gift ideas, your birthday and all settings to a .zip file</string>
